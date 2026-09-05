@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder OS — Working System</title>
+<meta name="description" content="Builder OS working system: lead follow-up, site visits, broker commissions, installment collections and RERA exports. Demo runs in your browser.">
+<style>
+  :root{--ink:#12141a;--card:#1a1d26;--line:#2a2e3a;--gold:#d9a441;--gold2:#b8842a;--mut:#9aa1b2;--bg:#0e1015;--red:#e05252;--green:#3ec97e;--blue:#5b8def;--amber:#e0a52e;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:#e8eaf0;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+  header{position:sticky;top:0;z-index:60;background:rgba(14,16,21,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .hbar{display:flex;justify-content:space-between;align-items:center;padding:14px 0;gap:10px;flex-wrap:wrap}
+  .logo{font-weight:700;font-size:1rem}
+  .logo span{color:var(--gold)}
+  .hbtns{display:flex;gap:8px}
+  .hbtn{background:var(--card);border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 12px;font-size:.75rem;cursor:pointer}
+  .hbtn:hover{color:#e8eaf0;border-color:var(--gold)}
+  .banner{background:#1f2430;border-bottom:1px solid var(--line);color:var(--mut);font-size:.75rem;padding:8px 0;text-align:center}
+  .banner b{color:var(--gold)}
+  .tabs{display:flex;gap:4px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex-shrink:0;background:none;border:1px solid transparent;color:var(--mut);padding:8px 15px;border-radius:8px;font-size:.85rem;cursor:pointer;font-weight:600}
+  .tab.on{background:var(--card);border-color:var(--gold);color:var(--gold)}
+  .page{padding:22px 0 60px;display:none}
+  .page.on{display:block}
+  .ptitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+  .ptitle h1{font-size:1.15rem}
+  .ptitle p{font-size:.78rem;color:var(--mut)}
+  .btn{background:var(--gold);color:var(--ink);border:none;border-radius:8px;padding:9px 16px;font-size:.8rem;font-weight:700;cursor:pointer}
+  .btn:hover{background:var(--gold2)}
+  .btn.ghost{background:var(--card);border:1px solid var(--line);color:#e8eaf0;font-weight:500}
+  .btn.ghost:hover{border-color:var(--gold)}
+  .btn.mini{padding:5px 10px;font-size:.7rem;font-weight:500}
+  .btn.danger{background:var(--card);border:1px solid #5a2e2e;color:var(--red)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .kpi b{display:block;font-size:1.45rem;color:var(--gold);font-weight:800}
+  .kpi span{font-size:.74rem;color:var(--mut)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+  .panel h3{font-size:.85rem;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.85rem;flex-wrap:wrap}
+  .row:last-child{border-bottom:none}
+  .row .sub{color:var(--mut);font-size:.74rem}
+  .board{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:120px}
+  .col h4{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--mut);display:flex;justify-content:space-between;padding:2px 4px 8px}
+  .col h4 b{color:var(--gold)}
+  .leadcard{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:7px;font-size:.82rem}
+  .leadcard b{font-size:.88rem;display:block}
+  .tag{display:inline-block;font-size:.66rem;background:var(--line);color:var(--mut);border-radius:5px;padding:2px 7px;margin-top:4px}
+  .tag.gold{color:var(--gold);border:1px solid var(--gold2);background:transparent}
+  .tag.red{color:var(--red);border:1px solid #5a2e2e;background:transparent}
+  .tag.green{color:var(--green);border:1px solid #2e5a3e;background:transparent}
+  .alert{font-size:.72rem;color:var(--red);margin-top:5px}
+  .rec{font-size:.72rem;color:var(--green);margin-top:5px}
+  .acts{margin-top:8px;display:flex;gap:5px;flex-wrap:wrap}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th{text-align:left;color:var(--mut);font-size:.66rem;text-transform:uppercase;letter-spacing:1px;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line)}
+  .num{text-align:right;white-space:nowrap}
+  .gold{color:var(--gold);font-weight:700}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;z-index:100;overflow:auto}
+  .modal.on{display:flex}
+  .sheet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;max-width:460px;width:100%;margin-top:40px}
+  .sheet h3{color:var(--gold);font-size:.95rem;margin-bottom:14px}
+  .sheet label{display:block;font-size:.72rem;color:var(--mut);margin:10px 0 4px}
+  .sheet input,.sheet select{width:100%;background:var(--bg);border:1px solid var(--line);color:#e8eaf0;border-radius:8px;padding:9px 11px;font-size:.85rem}
+  .sheet .frow{display:flex;gap:10px}
+  .sheet .frow>div{flex:1}
+  .sheet .btnrow{margin-top:16px;display:flex;gap:8px;justify-content:flex-end}
+  .empty{color:var(--mut);font-size:.8rem;padding:14px;text-align:center}
+  .note{font-size:.7rem;color:var(--mut);margin-top:8px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--gold);color:var(--gold);border-radius:10px;padding:10px 20px;font-size:.8rem;z-index:200;opacity:0;transition:.3s;pointer-events:none}
+  .toast.on{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hbar">
+    <div class="logo">BUILDER<span>OS</span> <span style="color:var(--mut);font-weight:400;font-size:.75rem">· Shree Residency, Jaipur</span></div>
+    <div class="hbtns">
+      <button class="hbtn" onclick="go('rera')">Export</button>
+      <button class="hbtn" onclick="resetDemo()">Reset demo</button>
+    </div>
+  </div>
+  <div class="wrap tabs" id="tabs">
+    <button class="tab on" data-p="dash" onclick="go('dash')">Dashboard</button>
+    <button class="tab" data-p="leads" onclick="go('leads')">Leads</button>
+    <button class="tab" data-p="visits" onclick="go('visits')">Site Visits</button>
+    <button class="tab" data-p="brokers" onclick="go('brokers')">Brokers</button>
+    <button class="tab" data-p="collections" onclick="go('collections')">Collections</button>
+    <button class="tab" data-p="rera" onclick="go('rera')">RERA Export</button>
+  </div>
+</header>
+<div class="banner">Working demo — all data stays in <b>your browser only</b>. Nothing is sent anywhere. In the live product this is your real project on a secure server.</div>
+
+<div class="wrap">
+  <div class="page on" id="p-dash"></div>
+  <div class="page" id="p-leads"></div>
+  <div class="page" id="p-visits"></div>
+  <div class="page" id="p-brokers"></div>
+  <div class="page" id="p-collections"></div>
+  <div class="page" id="p-rera"></div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ---------- data ---------- */
+const KEY="bos_app_v1";
+const STAGES=["new","called","visit","negotiating","won","lost"];
+const LBL={new:"New",called:"Called",visit:"Visit booked",negotiating:"Negotiating",won:"Won",lost:"Lost"};
+const SOURCES=["Facebook Ad","Google","99acres","Broker","Walk-in","Referral","Hoardings"];
+function d(off){const t=new Date();t.setDate(t.getDate()+off);return t.toISOString().slice(0,10);}
+function money(l){return "Rs "+(l>=100? (l/100).toFixed(1)+" Cr" : l.toFixed(1)+" L");}
+function today(){return d(0);}
+let S=null;
+function seed(){
+  return {
+    brokers:[
+      {id:1,name:"Ram Kaka Properties",phone:"9829011111",pct:1.5,paid:false},
+      {id:2,name:"Sharma Real Estate",phone:"9829022222",pct:2,paid:false},
+      {id:3,name:"Marwadi Estates",phone:"9829033333",pct:2,paid:true}
+    ],
+    leads:[
+      {id:1,name:"Ramesh Sharma",phone:"9829044444",source:"Facebook Ad",brokerId:1,stage:"new",valueL:45,cold:false,silent:0,wasCold:false,created:d(-20)},
+      {id:2,name:"Sunita Agarwal",phone:"9829055555",source:"99acres",brokerId:0,stage:"called",valueL:38,cold:false,silent:0,wasCold:false,created:d(-15)},
+      {id:3,name:"Vikas Tomar",phone:"9829066666",source:"Broker",brokerId:1,stage:"visit",valueL:52,cold:false,silent:0,wasCold:false,created:d(-12)},
+      {id:4,name:"Praveen Jain",phone:"9829077777",source:"Facebook Ad",brokerId:2,stage:"negotiating",valueL:60,cold:false,silent:0,wasCold:true,created:d(-30)},
+      {id:5,name:"Deepak Soni",phone:"9829088888",source:"Walk-in",brokerId:0,stage:"won",valueL:42,cold:false,silent:0,wasCold:true,created:d(-40)},
+      {id:6,name:"Manish Gupta",phone:"9829099999",source:"Google",brokerId:3,stage:"won",valueL:75,cold:false,silent:0,wasCold:false,created:d(-55)},
+      {id:7,name:"Alok Mishra",phone:"9829111111",source:"Facebook Ad",brokerId:0,stage:"called",valueL:30,cold:true,silent:4,wasCold:false,created:d(-10)},
+      {id:8,name:"Rekha Choudhary",phone:"9829122222",source:"99acres",brokerId:2,stage:"new",valueL:48,cold:true,silent:2,wasCold:false,created:d(-6)},
+      {id:9,name:"Sanjay Rathore",phone:"9829133333",source:"Referral",brokerId:0,stage:"lost",valueL:0,cold:false,silent:0,wasCold:false,created:d(-25)}
+    ],
+    visits:[
+      {id:1,leadId:3,date:d(0),time:"11:30",property:"Plot 14B, Shree Residency",brokerId:1,status:"scheduled"},
+      {id:2,leadId:4,date:d(2),time:"17:00",property:"Villa block A, Shree Residency",brokerId:2,status:"scheduled"},
+      {id:3,leadId:5,date:d(-8),time:"10:00",property:"Plot 22, Shree Residency",brokerId:0,status:"done"}
+    ],
+    bookings:[
+      {id:1,buyer:"Deepak Soni",phone:"9829088888",property:"Plot 22, Shree Residency",brokerId:0,totalL:42,advanceL:8,monthlyL:2.5,months:13,paidCount:1,firstDue:d(-5),created:d(-40)},
+      {id:2,buyer:"Manish Gupta",phone:"9829099999",property:"Villa 3, Shree Residency",brokerId:3,totalL:75,advanceL:15,monthlyL:5,months:12,paidCount:2,firstDue:d(-15),created:d(-55)}
+    ]
+  };
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function load(){try{return JSON.parse(localStorage.getItem(KEY));}catch(e){return null;}}
+S=load()||seed();save();
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
+function brokerName(id){const b=S.brokers.find(x=>x.id===id);return b?b.name:"—";}
+function wa(phone,text){return "https://wa.me/91"+String(phone).replace(/\D/g,"")+"?text="+encodeURIComponent(text);}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200);}
+function dueDate(b){const dt=new Date(b.firstDue);dt.setMonth(dt.getMonth()+b.paidCount);return dt.toISOString().slice(0,10);}
+function paidL(b){return b.advanceL+b.monthlyL*b.paidCount;}
+function bookingOverdue(b){return b.paidCount<b.months&&dueDate(b)<today();}
+function leadValue(l){return l.stage==="won"?l.valueL:0;}
+
+/* ---------- navigation ---------- */
+function go(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("on"));
+  document.getElementById("p-"+p).classList.add("on");
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.p===p));
+  render(p);
+}
+function render(p){({"dash":rDash,"leads":rLeads,"visits":rVisits,"brokers":rBrokers,"collections":rColl,"rera":rRera})[p]();}
+
+/* ---------- modal forms ---------- */
+function closeModal(){document.getElementById("modal").classList.remove("on");}
+function openForm(title,html,onSubmit){
+  const sh=document.getElementById("sheet");
+  sh.innerHTML="<h3>"+title+"</h3>"+html+
+    "<div class='btnrow'><button class='btn ghost' onclick='closeModal()'>Cancel</button><button class='btn' id='fmSubmit'>Save</button></div>";
+  document.getElementById("modal").classList.add("on");
+  document.getElementById("fmSubmit").onclick=()=>{
+    const obj={};sh.querySelectorAll("[data-f]").forEach(el=>obj[el.dataset.f]=el.value);
+    if(onSubmit(obj)!==false){closeModal();render(cur);}
+  };
+}
+let cur="dash";
+
+/* ---------- DASHBOARD ---------- */
+function rDash(){
+  const pipe=S.leads.filter(l=>["new","called","visit","negotiating"].includes(l.stage));
+  const won=S.leads.filter(l=>l.stage==="won");
+  const recovered=S.leads.filter(l=>l.wasCold&&l.stage==="won");
+  const coldNow=S.leads.filter(l=>l.cold&&["new","called","visit","negotiating"].includes(l.stage));
+  const wonVal=won.reduce((a,l)=>a+leadValue(l),0);
+  const commDue=S.leads.filter(l=>l.stage==="won"&&l.brokerId).reduce((a,l)=>{const b=S.brokers.find(x=>x.id===l.brokerId);return a+(b?l.valueL*b.pct/100:0);},0);
+  const tVisits=S.visits.filter(v=>v.status==="scheduled"&&v.date<=d(1));
+  const overdue=S.bookings.filter(bookingOverdue);
+  const odAmt=overdue.reduce((a,b)=>a+b.monthlyL,0);
+  const el=document.getElementById("p-dash");
+  el.innerHTML=
+  "<div class='ptitle'><div><h1>Dashboard</h1><p>Owner view — where your money stands this week</p></div>"+
+  "<button class='btn' onclick='newLead()'>+ New Lead</button></div>"+
+  "<div class='cards'>"+
+    kpi(pipe.length,"Active leads in pipeline")+
+    kpi(money(wonVal),"Bookings won to date")+
+    kpi(money(recovered.reduce((a,l)=>a+leadValue(l),0)),"Recovered (nearly lost, then won)")+
+    kpi("Rs "+odAmt.toFixed(1)+" L","Overdue installments now")+
+  "</div>"+
+  "<div class='panel'><h3>Follow-ups due today — "+coldNow.length+" silent lead(s)</h3>"+
+    (coldNow.length? coldNow.map(l=>
+      "<div class='row'><div><b>"+esc(l.name)+"</b><div class='sub'>No response "+l.silent+" day(s) · "+esc(l.source)+"</div></div>"+
+      "<div class='acts'><a class='btn mini' target='_blank' href='"+wa(l.phone,"Namaste "+l.name+", Shree Residency ke baare mein baat ho rahi thi. Kya aap site visit fix kar sakte hain is week?")+"'>WhatsApp</a></div></div>").join("")
+    :"<div class='empty'>Nothing silent. Whole pipeline is awake.</div>")+"</div>"+
+  "<div class='panel'><h3>Site visits — next 2 days</h3>"+
+    (tVisits.length? tVisits.map(v=>{const l=S.leads.find(x=>x.id===v.leadId);
+      return "<div class='row'><div><b>"+esc(l?l.name:"—")+"</b><div class='sub'>"+v.date+" · "+v.time+" · "+esc(v.property)+"</div></div>"+
+      "<div class='sub'>Broker: "+esc(brokerName(v.brokerId))+"</div></div>";}).join("")
+    :"<div class='empty'>No visits scheduled. Chase the silent leads above.</div>")+"</div>"+
+  "<div class='panel'><h3>Money position</h3>"+
+    "<div class='row'><div>Broker commissions payable (on won deals)</div><div class='gold'>"+money(commDue)+"</div></div>"+
+    "<div class='row'><div>Installments overdue</div><div style='color:var(--red);font-weight:700'>"+(overdue.length?money(odAmt):"None")+"</div></div>"+
+    "<div class='row'><div>Bookings with active payment plans</div><div class='gold'>"+S.bookings.length+"</div></div></div>"+
+  "<p class='note'>The dashboard updates the moment your staff updates a lead. No more asking \"kya chal raha hai?\" — the answer is here.</p>";
+}
+function kpi(v,l){return "<div class='kpi'><b>"+v+"</b><span>"+l+"</span></div>";}
+
+/* ---------- LEADS ---------- */
+function rLeads(){
+  const el=document.getElementById("p-leads");
+  let board="";
+  STAGES.forEach(st=>{
+    const list=S.leads.filter(l=>l.stage===st);
+    board+="<div class='col'><h4>"+LBL[st]+" <b>"+list.length+"</b></h4>"+list.map(l=>{
+      const i=STAGES.indexOf(st);
+      const back=(i>0&&i<5)?"<button class='btn mini ghost' onclick=\"move("+l.id+",-1)\">&lsaquo;</button>":"";
+      const fwd=(i<4)?"<button class='btn mini ghost' onclick=\"move("+l.id+",1)\">&rsaquo;</button>":"";
+      const na=(st==="called")?"<button class='btn mini danger' onclick='noAns("+l.id+")'>No answer</button>":"";
+      const waB=(st!=="won"&&st!=="lost")?"<a class='btn mini' target='_blank' href='"+wa(l.phone,"Namaste "+l.name+", Shree Residency, Jaipur ke baare mein baat ho rahi thi.")+"'>WhatsApp</a>":"";
+      return "<div class='leadcard'><b>"+esc(l.name)+"</b>"+
+        "<span class='tag'>"+esc(l.source)+"</span> "+
+        (l.brokerId?"<span class='tag gold'>"+esc(brokerName(l.brokerId))+"</span>":"")+
+        (l.valueL?"<span class='tag'>Est "+money(l.valueL)+"</span>":"")+
+        (l.cold?"<div class='alert'>Silent "+l.silent+" day(s) — follow-up due</div>":"")+
+        (l.wasCold&&l.stage==="won"?"<div class='rec'>Recovered lead</div>":"")+
+        "<div class='acts'>"+back+na+fwd+waB+"</div></div>";
+    }).join("")+"</div>";
+  });
+  el.innerHTML="<div class='ptitle'><div><h1>Lead Engine</h1><p>Every enquiry logged, sourced, followed up till decision</p></div><button class='btn' onclick='newLead()'>+ New Lead</button></div>"+board+
+  "<p class='note'>Tap &lsaquo; &rsaquo; to move a lead forward. \"No answer\" starts the follow-up clock — the lead appears on the Dashboard under follow-ups due today.</p>";
+}
+function newLead(){
+  cur="leads";
+  openForm("New Lead",
+    "<label>Full name</label><input data-f='name'>"+
+    "<div class='frow'><div><label>Phone</label><input data-f='phone' inputmode='numeric'></div><div><label>Est. value (Rs lakh)</label><input data-f='valueL' type='number' value='40'></div></div>"+
+    "<div class='frow'><div><label>Source</label><select data-f='source'>"+SOURCES.map(s=>"<option>"+s+"</option>").join("")+"</select></div>"+
+    "<div><label>Broker</label><select data-f='brokerId'><option value='0'>Direct (no broker)</option>"+S.brokers.map(b=>"<option value='"+b.id+"'>"+esc(b.name)+"</option>").join("")+"</select></div></div>",
+    o=>{
+      if(!o.name.trim()||!o.phone.trim()){alert("Name and phone required");return false;}
+      S.leads.push({id:Date.now(),name:o.name.trim(),phone:o.phone.trim(),source:o.source,brokerId:+o.brokerId,stage:"new",valueL:+o.valueL||0,cold:false,silent:0,wasCold:false,created:today()});
+      save();toast("Lead added");});
+}
+function move(id,dir){
+  const l=S.leads.find(x=>x.id===id);const i=STAGES.indexOf(l.stage)+dir;
+  if(i<0||i>=STAGES.length)return;
+  l.stage=STAGES[i];l.cold=false;l.silent=0;
+  if(l.stage==="won"){l.wasCold=l.wasCold||l.cold;toast("Won — shabaash. Create the payment plan in Collections.");}
+  save();render(cur);
+}
+function noAns(id){const l=S.leads.find(x=>x.id===id);l.cold=true;l.silent=Math.max(1,l.silent+1);save();toast("Follow-up clock started");render(cur);}
+
+/* ---------- VISITS ---------- */
+function rVisits(){
+  const list=S.visits.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  const el=document.getElementById("p-visits");
+  el.innerHTML="<div class='ptitle'><div><h1>Site-Visit Scheduler</h1><p>Every visit booked, confirmed, and followed up</p></div><button class='btn' onclick='newVisit()'>+ Schedule Visit</button></div>"+
+  "<div class='panel'><table><tr><th>Lead</th><th>When</th><th>Property</th><th>Broker</th><th>Status</th></tr>"+
+  (list.length?list.map(v=>{const l=S.leads.find(x=>x.id===v.leadId);
+    const badge=v.status==="done"?"<span class='tag green'>Done</span>":v.status==="noshow"?"<span class='tag red'>No-show — lead sent to follow-up</span>":"<span class='tag gold'>Scheduled</span>";
+    const acts=v.status==="scheduled"?
+      "<div class='acts'><a class='btn mini' target='_blank' href='"+wa(l?l.phone:"",esc(v.date)+" ko "+esc(v.time)+" pe site visit confirm hai. Address: Shree Residency office, Tonk Road. Dhanyawad!")+"'>Confirm</a>"+
+      "<button class='btn mini ghost' onclick='visitDone("+v.id+")'>Done</button>"+
+      "<button class='btn mini danger' onclick='visitNo("+v.id+")'>No-show</button></div>":"";
+    return "<tr><td><b>"+esc(l?l.name:"—")+"</b><div class='sub' style='color:var(--mut);font-size:.72rem'>"+esc(l?l.phone:"")+"</div></td>"+
+    "<td>"+v.date+"<div class='sub' style='color:var(--mut);font-size:.72rem'>"+v.time+"</div></td>"+
+    "<td style='font-size:.78rem'>"+esc(v.property)+"</td><td style='font-size:.78rem'>"+esc(brokerName(v.brokerId))+"</td><td>"+badge+acts+"</td></tr>";}).join("")
+  :"<tr><td colspan='5' class='empty'>No visits yet. Schedule one from a lead.</td></tr>")+"</table></div>"+
+  "<p class='note'>A no-show automatically sends the lead back into follow-up — the deal is never left for dead.</p>";
+}
+function newVisit(){
+  cur="visits";
+  const cands=S.leads.filter(l=>["new","called","visit","negotiating"].includes(l.stage));
+  openForm("Schedule Site Visit",
+    "<label>Lead</label><select data-f='leadId'>"+cands.map(l=>"<option value='"+l.id+"'>"+esc(l.name)+"</option>").join("")+"</select>"+
+    "<div class='frow'><div><label>Date</label><input data-f='date' type='date' value='"+d(1)+"'></div><div><label>Time</label><input data-f='time' type='time' value='11:00'></div></div>"+
+    "<label>Property / plot</label><input data-f='property' value='Shree Residency'>"+
+    "<label>Broker (optional)</label><select data-f='brokerId'><option value='0'>Direct</option>"+S.brokers.map(b=>"<option value='"+b.id+"'>"+esc(b.name)+"</option>").join("")+"</select>",
+    o=>{
+      S.visits.push({id:Date.now(),leadId:+o.leadId,date:o.date,time:o.time,property:o.property,brokerId:+o.brokerId,status:"scheduled"});
+      const l=S.leads.find(x=>x.id===+o.leadId);if(l&&l.stage==="new")l.stage="called";
+      save();toast("Visit scheduled");});
+}
+function visitDone(id){const v=S.visits.find(x=>x.id===id);v.status="done";save();render(cur);}
+function visitNo(id){
+  const v=S.visits.find(x=>x.id===id);v.status="noshow";
+  const l=S.leads.find(x=>x.id===v.leadId);if(l){l.cold=true;l.silent=1;if(l.stage==="new")l.stage="called";}
+  save();toast("Lead returned to follow-up list");render(cur);
+}
+
+/* ---------- BROKERS ---------- */
+function rBrokers(){
+  const el=document.getElementById("p-brokers");
+  el.innerHTML="<div class='ptitle'><div><h1>Broker Portal</h1><p>Every lead attributed, every commission calculated — no settlement-day disputes</p></div><button class='btn' onclick='newBroker()'>+ New Broker</button></div>"+
+  "<div class='panel'><table><tr><th>Broker</th><th>Leads</th><th>Deals won</th><th>Commission earned</th><th>Payout</th></tr>"+
+  S.brokers.map(b=>{
+    const mine=S.leads.filter(l=>l.brokerId===b.id);
+    const won=mine.filter(l=>l.stage==="won");
+    const comm=won.reduce((a,l)=>a+l.valueL*b.pct/100,0);
+    return "<tr><td><b>"+esc(b.name)+"</b><div class='sub' style='color:var(--mut);font-size:.72rem'>"+esc(b.phone)+" · "+b.pct+"% per deal</div></td>"+
+    "<td>"+mine.length+"</td><td>"+won.length+"</td><td class='gold'>"+money(comm)+"</td>"+
+    "<td>"+(comm>0? "<button class='btn mini "+(b.paid?"ghost":"")+"' onclick='togglePaid("+b.id+")'>"+(b.paid?"Paid — undo":"Mark paid")+"</button>":"<span style='color:var(--mut)'>—</span>")+"</td></tr>";
+  }).join("")+"</table></div>"+
+  "<div class='panel'><h3>Deal-level attribution (the dispute-killer)</h3>"+
+  S.leads.filter(l=>l.brokerId&&l.stage==="won").map(l=>{
+    const b=S.brokers.find(x=>x.id===l.brokerId);
+    return "<div class='row'><div><b>"+esc(l.name)+"</b><div class='sub'>via "+esc(b.name)+" · "+money(l.valueL)+" deal</div></div><div class='gold'>Commission "+money(l.valueL*b.pct/100)+"</div></div>";
+  }).join("")+"</div>"+
+  "<p class='note'>Commission is calculated the moment a deal is marked Won — using each broker's own percentage. Settlement day becomes a printout, not a negotiation.</p>";
+}
+function newBroker(){
+  cur="brokers";
+  openForm("New Broker / Channel Partner",
+    "<label>Name / firm</label><input data-f='name'>"+
+    "<div class='frow'><div><label>Phone</label><input data-f='phone' inputmode='numeric'></div><div><label>Commission %</label><input data-f='pct' type='number' step='0.1' value='1.5'></div></div>",
+    o=>{if(!o.name.trim())return alert("Name required"),false;
+      S.brokers.push({id:Date.now(),name:o.name.trim(),phone:o.phone.trim(),pct:+o.pct||1.5,paid:false});
+      save();toast("Broker added");});
+}
+function togglePaid(id){const b=S.brokers.find(x=>x.id===id);b.paid=!b.paid;save();render(cur);}
+
+/* ---------- COLLECTIONS ---------- */
+function rColl(){
+  const el=document.getElementById("p-collections");
+  const rows=S.bookings.map(b=>{
+    const next=dueDate(b),od=bookingOverdue(b);
+    const rem=b.totalL-paidL(b);
+    const acts=b.paidCount<b.months?
+      "<div class='acts'><a class='btn mini' target='_blank' href='"+wa(b.phone,"Namaste "+b.buyer+", aapka installment "+money(b.monthlyL)+" due hai ("+next+"). Payment link bhej dein? — Shree Residency")+"'>Remind</a>"+
+      "<button class='btn mini ghost' onclick='pay("+b.id+")'>Received</button></div>":"<span class='tag green'>Plan complete</span>";
+    return "<tr><td><b>"+esc(b.buyer)+"</b><div class='sub' style='color:var(--mut);font-size:.72rem'>"+esc(b.property)+"</div></td>"+
+    "<td class='gold num'>"+money(b.totalL)+"</td>"+
+    "<td class='num'>"+money(paidL(b))+"</td>"+
+    "<td class='num'>"+money(rem)+"</td>"+
+    "<td>"+(od?"<span class='tag red'>Overdue</span> ":"")+next+(od?"":"<div class='sub' style='color:var(--mut);font-size:.72rem'>"+money(b.monthlyL)+" monthly</div>")+"</td>"+
+    "<td>"+acts+"</td></tr>";
+  }).join("");
+  const odTotal=S.bookings.filter(bookingOverdue).reduce((a,b)=>a+b.monthlyL,0);
+  el.innerHTML="<div class='ptitle'><div><h1>Collection Tracker</h1><p>Installment plans, due dates, defaulter board — money on schedule</p></div><button class='btn' onclick='newBooking()'>+ New Payment Plan</button></div>"+
+  "<div class='cards'>"+kpi(money(S.bookings.reduce((a,b)=>a+b.totalL,0)),"Booked value on plans")+
+  kpi(money(S.bookings.reduce((a,b)=>a+paidL(b),0)),"Collected so far")+
+  kpi(odTotal>0?money(odTotal):"None","Overdue right now")+"</div>"+
+  "<div class='panel'><table><tr><th>Buyer</th><th class='num'>Plan total</th><th class='num'>Paid</th><th class='num'>Balance</th><th>Next due</th><th>Action</th></tr>"+rows+"</table></div>"+
+  "<p class='note'>\"Remind\" sends a ready WhatsApp message with the amount and date. \"Received\" records the payment and moves the plan forward automatically.</p>";
+}
+function newBooking(){
+  cur="collections";
+  const wonL=S.leads.filter(l=>l.stage==="won");
+  openForm("New Payment Plan",
+    "<label>Buyer (from won leads)</label><select data-f='leadId'>"+wonL.map(l=>"<option value='"+l.id+"'>"+esc(l.name)+"</option>").join("")+"</select>"+
+    "<label>Property</label><input data-f='property' value='Shree Residency'>"+
+    "<div class='frow'><div><label>Deal total (Rs lakh)</label><input data-f='totalL' type='number' value='40'></div><div><label>Advance received (Rs lakh)</label><input data-f='advanceL' type='number' value='8'></div></div>"+
+    "<div class='frow'><div><label>Monthly installment (Rs lakh)</label><input data-f='monthlyL' type='number' step='0.1' value='2'></div><div><label>First due date</label><input data-f='firstDue' type='date' value='"+d(25)+"'></div></div>"+
+    "<label>Number of months (auto from balance if blank)</label><input data-f='months' type='number' placeholder='auto'>",
+    o=>{
+      const l=S.leads.find(x=>x.id===+o.leadId);
+      const totalL=+o.totalL,advanceL=+o.advanceL,monthlyL=+o.monthlyL;
+      if(!totalL||!monthlyL){alert("Total and monthly required");return false;}
+      const rem=totalL-advanceL;
+      const months=o.months?+o.months:Math.ceil(rem/monthlyL);
+      S.bookings.push({id:Date.now(),buyer:l.name,phone:l.phone,property:o.property,brokerId:l.brokerId,totalL,advanceL,monthlyL,months,paidCount:0,firstDue:o.firstDue,created:today()});
+      save();toast("Plan created: "+months+" months");});
+}
+function pay(id){const b=S.bookings.find(x=>x.id===id);b.paidCount++;save();toast("Payment recorded — "+money(b.monthlyL));render(cur);}
+
+/* ---------- RERA ---------- */
+function qStart(){const n=new Date();return new Date(n.getFullYear(),Math.floor(n.getMonth()/3)*3,1).toISOString().slice(0,10);}
+function inQ(ds){return ds>=qStart();}
+function rRera(){
+  const el=document.getElementById("p-rera");
+  const qB=S.bookings.filter(b=>inQ(b.created));
+  const wonQ=S.leads.filter(l=>l.stage==="won"&&inQ(l.created));
+  const collectedQ=S.bookings.reduce((a,b)=>{if(inQ(b.created))a+=b.advanceL;return a+b.monthlyL*Math.max(0,b.paidCount);},0);
+  el.innerHTML="<div class='ptitle'><div><h1>RERA Export</h1><p>Quarter started "+qStart()+" — one clean file for your CA</p></div><button class='btn' onclick='downloadRera()'>Download CSV for CA</button></div>"+
+  "<div class='cards'>"+kpi(qB.length,"Bookings this quarter")+kpi(wonQ.length,"Deals won this quarter")+kpi(money(collectedQ),"Collected this quarter")+"</div>"+
+  "<div class='panel'><h3>What your CA receives</h3>"+
+  "<table><tr><th>Buyer</th><th>Property</th><th>Deal value</th><th>Advance</th><th>Collected till date</th><th>Broker</th></tr>"+
+  S.bookings.map(b=>"<tr><td><b>"+esc(b.buyer)+"</b></td><td style='font-size:.78rem'>"+esc(b.property)+"</td><td class='gold num'>"+money(b.totalL)+"</td><td class='num'>"+money(b.advanceL)+"</td><td class='num'>"+money(paidL(b))+"</td><td style='font-size:.78rem'>"+esc(brokerName(b.brokerId))+"</td></tr>").join("")+
+  "</table></div>"+
+  "<div class='panel'><h3>Broker payout summary</h3>"+
+  S.brokers.map(b=>{const c=S.leads.filter(l=>l.brokerId===b.id&&l.stage==="won").reduce((a,l)=>a+l.valueL*b.pct/100,0);
+    return "<div class='row'><div>"+esc(b.name)+"</div><div class='gold'>"+money(c)+"</div></div>";}).join("")+"</div>"+
+  "<p class='note'>Builder OS provides structured data exports. Filings and compliance remain the promoter's and CA's responsibility — we provide no legal advice, as it should be.</p>";
+}
+function downloadRera(){
+  const lines=[["BUILDER OS — QUARTERLY EXPORT","Project: Shree Residency, Jaipur"],["Generated",new Date().toLocaleString()],[],["BOOKINGS",],["Buyer","Phone","Property","Total (L)","Advance (L)","Collected (L)","Broker","Booked on"]];
+  S.bookings.forEach(b=>lines.push([b.buyer,b.phone,b.property,b.totalL,b.advanceL,paidL(b),brokerName(b.brokerId),b.created]));
+  lines.push([]);lines.push(["BROKER PAYOUTS"]);lines.push(["Broker","Deals won","Commission (L)","Paid out"]);
+  S.brokers.forEach(b=>{const w=S.leads.filter(l=>l.brokerId===b.id&&l.stage==="won");lines.push([b.name,w.length,(w.reduce((a,l)=>a+l.valueL,0)*b.pct/100).toFixed(2),b.paid?"Yes":"No"]);});
+  lines.push([]);lines.push(["Note: Builder OS provides data systems, not legal or compliance advice."]);
+  const csv=lines.map(r=>r.map(c=>{c=String(c==null?"":c);return /[",\n]/.test(c)?"\""+c.replace(/"/g,"\"\"")+"\"":c;}).join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="shree-residency-rera-export.csv";a.click();
+  toast("CSV downloaded — send to your CA");
+}
+
+/* ---------- misc ---------- */
+function resetDemo(){if(confirm("Reset all demo data to the original sample?")){S=seed();save();render(cur);toast("Demo reset");}}
+go("dash");
+</script>
+</body>
+</html>

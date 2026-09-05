@@ -3,63 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Builder OS — Recover the leads your project deserves | Beyond Pixels</title>
-<meta name="description" content="Builder OS by Beyond Pixels — lead follow-up, broker records, collections & RERA-ready exports for Tier-2 builders. One click, one system, every lead accounted for.">
+<title>Builder OS — The Revenue Recovery System for Tier-2 Builders | Beyond Pixels</title>
+<meta name="description" content="Builder OS by Beyond Pixels — lead follow-up, broker commission records, installment collections and RERA-ready quarterly exports for Tier-2 real estate builders. One system, every lead accounted for.">
 <style>
   :root{--ink:#12141a;--card:#1a1d26;--line:#2a2e3a;--gold:#d9a441;--gold2:#b8842a;--mut:#9aa1b2;--bg:#0e1015;}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:#e8eaf0;line-height:1.6}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-  header{border-bottom:1px solid var(--line);padding:18px 0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:#e8eaf0;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header{position:sticky;top:0;z-index:50;background:rgba(14,16,21,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:16px 0}
   header .wrap{display:flex;justify-content:space-between;align-items:center}
   .logo{font-weight:700;font-size:1.05rem;letter-spacing:.5px}
   .logo span{color:var(--gold)}
-  .tag{font-size:.72rem;color:var(--mut);border:1px solid var(--line);padding:4px 10px;border-radius:20px}
-  .hero{padding:70px 0 50px;text-align:center}
-  .kicker{color:var(--gold);font-size:.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:600}
-  h1{font-size:clamp(1.7rem,5vw,2.8rem);margin:14px 0 10px;line-height:1.25}
+  nav{display:flex;gap:22px;align-items:center;font-size:.85rem}
+  nav a{color:var(--mut);text-decoration:none}
+  nav a:hover{color:#e8eaf0}
+  .cta-mini{background:var(--gold);color:var(--ink);font-weight:700;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:.85rem}
+  .hero{padding:80px 0 60px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(217,164,65,.09),transparent)}
+  .kicker{color:var(--gold);font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
+  h1{font-size:clamp(1.8rem,5vw,3rem);margin:16px 0 12px;line-height:1.2;font-weight:800}
   h1 em{color:var(--gold);font-style:normal}
-  .sub{color:var(--mut);max-width:640px;margin:0 auto 30px;font-size:1.05rem}
-  .cta{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#12141a;font-weight:700;padding:14px 34px;border-radius:10px;text-decoration:none;font-size:1rem;box-shadow:0 8px 30px rgba(217,164,65,.25)}
-  .cta:hover{transform:translateY(-1px)}
-  .cta2{display:inline-block;margin-top:12px;color:var(--mut);font-size:.9rem}
-  .stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:44px 0 10px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 26px;min-width:180px}
-  .stat b{display:block;font-size:1.5rem;color:var(--gold)}
-  .stat s{text-decoration:none;font-size:.8rem;color:var(--mut)}
-  section{padding:54px 0}
+  .sub{color:var(--mut);max-width:660px;margin:0 auto 32px;font-size:1.05rem}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);font-weight:700;padding:15px 36px;border-radius:10px;text-decoration:none;font-size:1rem;box-shadow:0 8px 30px rgba(217,164,65,.22)}
+  .cta:hover{transform:translateY(-1px);transition:.2s}
+  .cta2{display:inline-block;margin-top:14px;color:var(--mut);font-size:.9rem;text-decoration:none;border-bottom:1px solid var(--line)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:50px 0 0;text-align:left}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+  .stat b{display:block;font-size:1.6rem;color:var(--gold);font-weight:800}
+  .stat span{font-size:.82rem;color:var(--mut)}
+  section{padding:64px 0}
   .dark{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  h2{font-size:1.6rem;margin-bottom:8px;text-align:center}
-  .h2sub{color:var(--mut);text-align:center;margin-bottom:36px;font-size:.95rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  h2{font-size:1.7rem;margin-bottom:8px;text-align:center;font-weight:800}
+  .h2sub{color:var(--mut);text-align:center;margin-bottom:38px;font-size:.95rem;max-width:600px;margin-left:auto;margin-right:auto}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;transition:border-color .2s}
+  .card:hover{border-color:var(--gold)}
   .dark .card{background:var(--bg)}
+  .card .num{font-size:.72rem;color:var(--gold);letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:10px;display:block}
   .card h3{font-size:1.05rem;margin-bottom:8px}
-  .card p{color:var(--mut);font-size:.9rem}
-  .card .ico{font-size:1.5rem;margin-bottom:10px;display:block}
-  .leak{background:var(--bg)}
-  .leak table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.92rem}
-  .leak th,.leak td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left}
-  .leak th{color:var(--mut);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:1px}
-  .leak td:last-child{color:var(--gold);font-weight:700;white-space:nowrap}
-  .process{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
-  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:190px;text-align:center}
-  .step b{color:var(--gold);display:block;font-size:1.3rem;margin-bottom:6px}
+  .card p{color:var(--mut);font-size:.88rem}
+  .card .save{margin-top:12px;font-size:.78rem;color:var(--gold);border-top:1px solid var(--line);padding-top:10px}
+  table{width:100%;border-collapse:collapse;margin-top:22px;font-size:.9rem}
+  th,td{padding:13px 16px;border-bottom:1px solid var(--line);text-align:left}
+  th{color:var(--mut);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px}
+  td:last-child{color:var(--gold);font-weight:700;white-space:nowrap}
+  .process{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .step b{color:var(--gold);display:block;font-size:1.4rem;margin-bottom:8px;font-weight:800}
   .step p{font-size:.85rem;color:var(--mut)}
-  .faq{max-width:720px;margin:0 auto}
-  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:10px}
+  .faq{max-width:740px;margin:0 auto}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:10px}
   .q h3{font-size:.95rem}
-  .q p{color:var(--mut);font-size:.88rem;margin-top:6px}
-  footer{padding:40px 0;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;text-align:center}
+  .q p{color:var(--mut);font-size:.87rem;margin-top:6px}
+  .band{background:linear-gradient(135deg,#1c1a14,#14161d);border:1px solid var(--gold2);border-radius:16px;padding:36px;text-align:center;margin-top:20px}
+  .band h3{font-size:1.25rem;margin-bottom:6px}
+  .band p{color:var(--mut);font-size:.9rem;margin-bottom:20px}
+  footer{padding:44px 0;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;text-align:center}
   footer a{color:var(--gold);text-decoration:none}
-  .note{font-size:.75rem;color:var(--mut);text-align:center;margin-top:20px}
+  .note{font-size:.72rem;color:var(--mut);margin-top:18px;line-height:1.5}
+  @media(max-width:700px){nav a.hide-m{display:none}}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <div class="logo">BUILDER<span>OS</span></div>
-    <div class="tag">by Beyond Pixels</div>
+    <nav>
+      <a class="hide-m" href="#modules">Modules</a>
+      <a class="hide-m" href="#savings">Savings</a>
+      <a class="hide-m" href="#start">How to start</a>
+      <a class="cta-mini" href="app.html">Open Live App</a>
+    </nav>
   </div>
 </header>
 
@@ -67,80 +82,93 @@
   <div class="kicker">For Tier-2 Builders · Plots, Villas & Flats</div>
   <h1>Your ads bring leads.<br><em>WhatsApp loses them.</em></h1>
   <p class="sub">Builder OS follows up every enquiry, records every broker's deal, tracks every installment — and hands your CA a clean quarterly export in one click. Built for builders who sell on WhatsApp, not on software.</p>
-  <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20to%20know%20more%20about%20Builder%20OS" target="_blank">WhatsApp Us — 15 min is all we need</a>
-  <div><a class="cta2" href="demo.html">▶ See the live demo first</a></div>
+  <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20to%20know%20more%20about%20Builder%20OS" target="_blank">WhatsApp Us — 15 minutes is all we need</a>
+  <div><a class="cta2" href="app.html">Open the live working app</a></div>
   <div class="stats">
-    <div class="stat"><b>99%</b><s>of digital leads never get a second follow-up</s></div>
-    <div class="stat"><b>₹25K+</b><s>RERA late-filing penalty per quarter</s></div>
-    <div class="stat"><b>10 min</b><s>to a clean quarterly export for your CA</s></div>
+    <div class="stat"><b>99%</b><span>of digital leads never get a second follow-up</span></div>
+    <div class="stat"><b>Rs 25K+</b><span>RERA late-filing penalty per quarter</span></div>
+    <div class="stat"><b>10 min</b><span>for a clean quarterly export for your CA</span></div>
+    <div class="stat"><b>Zero</b><span>staff training — works inside WhatsApp</span></div>
   </div>
 </div>
 
-<section class="leak">
+<section id="leak">
   <div class="wrap">
     <h2>The leak every builder knows</h2>
     <p class="h2sub">You don't have a software problem. You have a recovery problem.</p>
     <table>
       <tr><th>Where your money goes</th><th>Today</th><th>With Builder OS</th></tr>
-      <tr><td>Facebook / Google leads</td><td>Die in WhatsApp after 1 call</td><td>Auto follow-up till visit booked</td></tr>
-      <tr><td>Broker commissions</td><td>"Ye lead kis ka tha?" — disputes</td><td>Every lead tagged to its broker</td></tr>
-      <tr><td>Buyer installments</td><td>Register + memory</td><td>Due dates, reminders, no leeway</td></tr>
-      <tr><td>RERA quarterly report</td><td>2–3 days of staff scrambling</td><td>One-click export</td></tr>
+      <tr><td>Facebook / Google leads</td><td>Die in WhatsApp after one call</td><td>Followed up till visit booked</td></tr>
+      <tr><td>Broker commissions</td><td>"This was whose lead?" — disputes at settlement</td><td>Every lead tagged, commissions auto-calculated</td></tr>
+      <tr><td>Buyer installments</td><td>Register + memory, dues slip silently</td><td>Due dates, reminders, defaulter board</td></tr>
+      <tr><td>RERA quarterly report</td><td>Two to three days of staff scrambling</td><td>One-click export for your CA</td></tr>
     </table>
   </div>
 </section>
 
-<section class="dark">
+<section class="dark" id="modules">
   <div class="wrap">
-    <h2>Four modules. One system.</h2>
-    <p class="h2sub">Everything a 1–3 project builder needs. Nothing he doesn't.</p>
+    <h2>Six modules. One system.</h2>
+    <p class="h2sub">Everything a one-to-three project builder needs. Nothing he doesn't.</p>
     <div class="grid">
-      <div class="card"><span class="ico">🔥</span><h3>Lead Engine</h3><p>Every enquiry — ads, 99acres, walk-ins, brokers — logged, scored, and followed up on schedule until they book or say no.</p></div>
-      <div class="card"><span class="ico">🤝</span><h3>Broker Portal</h3><p>Channel partners see their leads and their commissions. No disputes, no " adjustment", complete records for settlement day.</p></div>
-      <div class="card"><span class="ico">💰</span><h3>Collection Tracker</h3><p>Installment plans with due dates and automatic WhatsApp reminders. A defaulter board that never lets a payment slip.</p></div>
-      <div class="card"><span class="ico">📋</span><h3>RERA Export</h3><p>Quarterly bookings and collections as a clean, structured export for your CA. Note: we provide data systems, not legal advice — your CA files.</p></div>
+      <div class="card"><span class="num">Module 01</span><h3>Lead Engine</h3><p>Every enquiry — ads, 99acres, walk-ins, brokers — logged with source and value, auto-flagged when it goes cold, followed up on schedule until they book or say no.</p><div class="save">Saves: the 99% of ad spend currently written off</div></div>
+      <div class="card"><span class="num">Module 02</span><h3>Site-Visit Scheduler</h3><p>Visits booked with date, time, property and broker. Today's visits on one screen. No-shows go straight back into follow-up — never lost again.</p><div class="save">Saves: every "soch ke bataate hain" that never returned</div></div>
+      <div class="card"><span class="num">Module 03</span><h3>Broker Portal</h3><p>Channel partners see their leads and their commissions. Commission auto-calculated per deal. No disputes, no verbal "adjustments" on settlement day.</p><div class="save">Saves: the 8–15% of commission lost to attribution disputes</div></div>
+      <div class="card"><span class="num">Module 04</span><h3>Collection Tracker</h3><p>Installment plans generated automatically — advance, monthly dues, balance. Defaulter board with one-tap WhatsApp reminders. Collection forecast for the month ahead.</p><div class="save">Saves: interest cost of late collections, forgotten dues</div></div>
+      <div class="card"><span class="num">Module 05</span><h3>RERA Export</h3><p>Quarterly bookings, collections and broker payouts as a structured file for your CA — generated in one click, not two days. Your CA files; we make their inputs clean.</p><div class="save">Saves: 2–3 staff-days per quarter + penalty risk</div></div>
+      <div class="card"><span class="num">Module 06</span><h3>Recovery Dashboard</h3><p>Leads recovered that were almost lost, money collected vs. expected, follow-ups due today. The owner sees his project's money position, not just a contact list.</p><div class="save">Gives: the weekly truth about where money is leaking</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="savings">
+  <div class="wrap">
+    <h2>What it costs vs. what it saves</h2>
+    <p class="h2sub">Builder OS is a recovery system. The maths is on your side before the first meeting ends.</p>
+    <div class="grid">
+      <div class="card"><h3>One recovered plot deal</h3><p>A single plot booking recovered from a cold lead — at typical Tier-2 prices — covers years of Builder OS. Everything after that is profit.</p></div>
+      <div class="card"><h3>One prevented commission dispute</h3><p>Broker commission on one deal is often larger than a full year of the system. Clean attribution records pay for themselves on settlement day.</p></div>
+      <div class="card"><h3>Eight staff-days a year</h3><p>Quarterly RERA prep is two days of scrambling, four times a year. One-click exports give that time back to selling.</p></div>
+    </div>
+    <div class="band">
+      <h3>See it working on your own project in 90 days</h3>
+      <p>One project. Lead engine, follow-ups, collections and RERA export. We run it with you, and count the recovery in writing before we ever talk full pricing.</p>
+      <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot" target="_blank">Start the 90-day pilot</a>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="start">
+  <div class="wrap">
+    <h2>How we start</h2>
+    <p class="h2sub">No big contracts. No software lectures. A pilot on one project.</p>
+    <div class="process">
+      <div class="step"><b>01</b><p><strong>Coffee, 15 minutes</strong><br>We visit your office, understand your projects and where leads go to die. We listen first.</p></div>
+      <div class="step"><b>02</b><p><strong>90-day pilot</strong><br>One project. Lead engine + follow-ups + collections + RERA export. Managed with you, weekly.</p></div>
+      <div class="step"><b>03</b><p><strong>Count the recovery</strong><br>Recovered leads, collected dues, saved hours — written down before we talk pricing.</p></div>
+      <div class="step"><b>04</b><p><strong>Full system</strong><br>Pilot amount adjusts into setup. Your whole pipeline on one system, managed.</p></div>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="wrap">
-    <h2>How we start</h2>
-    <p class="h2sub">No big contracts. A 90-day pilot on one project.</p>
-    <div class="process">
-      <div class="step"><b>1</b><p><strong>Coffee, 15 min</strong><br>We visit your office, understand your projects and where leads go to die.</p></div>
-      <div class="step"><b>2</b><p><strong>90-day pilot</strong><br>One project. Lead engine + follow-ups + RERA export. We run it WITH you.</p></div>
-      <div class="step"><b>3</b><p><strong>Count the recovery</strong><br>Recovered leads, saved hours — written down before we ever talk pricing.</p></div>
-      <div class="step"><b>4</b><p><strong>Full system</strong><br>Pilot amount adjusted in setup. Your whole pipeline, managed.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="dark">
   <div class="wrap">
     <h2>Straight answers</h2>
     <div class="faq">
-      <div class="q"><h3>"Humara sab WhatsApp pe hota hai."</h3><p>Perfect — Builder OS lives on WhatsApp. Staff don't log into a portal; leads and reminders flow where your team already works. The system just makes sure nothing gets forgotten.</p></div>
+      <div class="q"><h3>"Humara sab WhatsApp pe hota hai."</h3><p>Perfect — Builder OS lives on WhatsApp. Your staff don't learn a new portal; leads, reminders and confirmations flow where your team already works. The system just makes sure nothing gets forgotten.</p></div>
       <div class="q"><h3>"Excel kaam karta hai humara."</h3><p>Excel shows what you typed. Builder OS shows what you forgot — the follow-up that never happened, the installment due last week, the broker's lead that became someone else's booking.</p></div>
-      <div class="q"><h3>"Ye RERA wale kaam mein kya karega?"</h3><p>Your CA gets a structured quarterly export in one click instead of asking your staff to rebuild data from screenshots. We're a data system, not a compliance advisor — your CA stays in charge of filings.</p></div>
+      <div class="q"><h3>"RERA wale kaam mein kya karega?"</h3><p>Your CA gets a structured quarterly export in one click instead of asking your staff to rebuild data from screenshots. We are a data system, not a compliance advisor — your CA stays fully in charge of filings.</p></div>
+      <div class="q"><h3>"Isme staff ko training lagegi?"</h3><p>None. The app is used by you or one office person for five minutes a day. Everything else — reminders, records, calculations — happens automatically. That's the point of a managed system.</p></div>
       <div class="q"><h3>"Setup kya kharcha aayega?"</h3><p>Start with the 90-day pilot — the amount adjusts into setup if you continue. Full pricing is discussed after you've seen it working on your own project, not before.</p></div>
     </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap" style="text-align:center">
-    <h2>One recovered plot pays for years of Builder OS.</h2>
-    <p class="h2sub">Your next launch is getting leads right now. The question is who follows up.</p>
-    <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20to%20know%20more%20about%20Builder%20OS" target="_blank">Talk to us on WhatsApp</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     <p><strong>Beyond Pixels</strong> — product studio. Also builders of <a href="https://my-gym-os.base44.app">Gym OS</a> for fitness businesses across India.</p>
-    <p style="margin-top:8px">📞 +91 77370 77479 &nbsp;·&nbsp; ✉️ beyondpixells@gmail.com</p>
-    <p class="note">RERA is a trademark of its respective authority; Builder OS is not affiliated with or endorsed by any government body. Builder OS provides data systems, not legal, tax, or compliance advice.</p>
+    <p style="margin-top:8px">+91 77370 77479 &nbsp;·&nbsp; beyondpixells@gmail.com</p>
+    <p class="note">Builder OS provides data systems, not legal, tax or compliance advice. RERA filings remain the responsibility of the promoter and their chartered accountant. Builder OS is not affiliated with or endorsed by any government authority.</p>
   </div>
 </footer>
 </body>

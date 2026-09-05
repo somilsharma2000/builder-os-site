@@ -1,10 +1,10 @@
-# Builder OS — Landing Page & Demo
+# Builder OS — Landing Page & Live App
 
-Public site for **Builder OS** by Beyond Pixels — the money-recovery operating system for Tier-2 Indian real estate builders.
+Public site for **Builder OS** by Beyond Pixels — the revenue recovery system for Tier-2 Indian real estate builders.
 
 - `index.html` — landing page
-- `demo.html` — self-contained interactive lead-board demo (runs offline, no backend)
+- `app.html` — the full working system demo: Dashboard, Lead Engine, Site-Visit Scheduler, Broker Portal (auto commission), Collection Tracker (installments, reminders), RERA Export (real CSV download). Runs 100% in the browser — no backend, no trackers.
 
-Deployed free via GitHub Pages. No trackers, no dependencies, loads fast on 4G.
+Deployed free via GitHub Pages. No dependencies, loads fast on 4G.
 
 Business enquiries: WhatsApp +91 77370 77479 · beyondpixells@gmail.com
