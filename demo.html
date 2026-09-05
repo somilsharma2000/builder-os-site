@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder OS — Live Demo (Lead Board)</title>
+<meta name="description" content="Interactive demo of the Builder OS lead follow-up board. Runs entirely in your browser — no data leaves this page.">
+<style>
+  :root{--ink:#12141a;--card:#1a1d26;--line:#2a2e3a;--gold:#d9a441;--mut:#9aa1b2;--bg:#0e1015;--red:#e05252;--green:#3ec97e;--blue:#5b8def;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#e8eaf0;padding:20px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+  h1{font-size:1.2rem}
+  h1 span{color:var(--gold)}
+  .pill{font-size:.7rem;background:var(--card);border:1px solid var(--line);padding:4px 12px;border-radius:16px;color:var(--mut)}
+  .topnote{background:#1f2430;border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:.82rem;color:var(--mut);margin-bottom:18px}
+  .topnote b{color:var(--gold)}
+  .board{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:200px}
+  .col h2{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--mut);display:flex;justify-content:space-between;margin-bottom:10px}
+  .col h2 b{color:var(--gold)}
+  .lead{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;font-size:.85rem}
+  .lead b{display:block;font-size:.92rem}
+  .lead .src{font-size:.72rem;color:var(--mut)}
+  .lead .due{font-size:.72rem;color:var(--red);margin-top:4px}
+  .lead .ok{font-size:.72rem;color:var(--green);margin-top:4px}
+  .lead .btns{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+  button{background:var(--line);color:#e8eaf0;border:none;border-radius:6px;padding:5px 10px;font-size:.72rem;cursor:pointer}
+  button:hover{background:var(--gold);color:var(--ink)}
+  button.primary{background:var(--gold);color:var(--ink);font-weight:600}
+  .addbar{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
+  input,select{background:var(--card);border:1px solid var(--line);color:#e8eaf0;border-radius:8px;padding:9px 12px;font-size:.85rem}
+  input{flex:1;min-width:180px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:.8rem;color:var(--mut)}
+  .stat b{color:var(--gold);font-size:1.1rem;display:block}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.on{display:flex}
+  .sheet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:520px;width:100%}
+  .sheet h3{color:var(--gold);margin-bottom:8px}
+  .sheet pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;font-size:.72rem;overflow:auto;max-height:220px;color:var(--green)}
+  .sheet p{font-size:.82rem;color:var(--mut);margin:8px 0 14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>BUILDER<span>OS</span> — Lead Board <span style="color:var(--mut);font-weight:400;font-size:.85rem">(demo)</span></h1>
+    <div class="pill">Runs 100% in your browser · nothing is sent anywhere</div>
+  </header>
+
+  <div class="topnote">👋 <b>Try it:</b> move leads across stages with the buttons — this is the exact follow-up discipline Builder OS enforces for a builder's team. Add a lead below, or press <b>RERA Export</b> to see the quarterly report your CA receives. Data saves in this browser only (reset: refresh + "Reset demo" button).</div>
+
+  <div class="addbar">
+    <input id="name" placeholder="Lead name (e.g. Ramesh Sharma)">
+    <select id="source"><option>Facebook Ad</option><option>99acres</option><option>Broker</option><option>Walk-in</option><option>Google</option></select>
+    <button class="primary" onclick="addLead()">+ Add Lead</button>
+    <button onclick="reraExport()">📋 RERA Export</button>
+    <button onclick="resetDemo()">Reset demo</button>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-total">0</b>total leads</div>
+    <div class="stat"><b id="s-recovered">0</b>recovered (won after being cold)</div>
+    <div class="stat"><b id="s-won">0</b>bookings won</div>
+    <div class="stat"><b id="s-cold">0</b>need follow-up TODAY</div>
+  </div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="sheet">
+    <h3>📋 Quarterly Export for CA</h3>
+    <p>This is the structured file your CA receives instead of WhatsApp screenshots. In the real product it's a formatted PDF/CSV with buyer details, collections, and broker attribution.</p>
+    <pre id="exportTxt"></pre>
+    <button class="primary" onclick="document.getElementById('modal').classList.remove('on')">Close</button>
+  </div>
+</div>
+
+<script>
+const STAGES=["new","called","visit","negotiating","won","lost"];
+const LABELS={new:"🔥 New",called:"📞 Called",visit:"📅 Visit Scheduled",negotiating:"🤝 Negotiating",won:"✅ Won",lost:"❌ Lost"};
+let leads=JSON.parse(localStorage.getItem("bos_demo")||"null")||[
+ {id:1,n:"Ramesh Sharma",s:"Facebook Ad",st:"new",cold:true,days:4},
+ {id:2,n:"Sunita Agarwal",s:"99acres",st:"called",cold:false,days:0},
+ {id:3,n:"Vikas Tomar",s:"Broker (Ram Kaka)",st:"visit",cold:false,days:0},
+ {id:4,n:"Praveen Jain",s:"Facebook Ad",st:"negotiating",cold:true,days:2,rec:true},
+ {id:5,n:"Deepak Soni",s:"Walk-in",st:"won",cold:false,days:0,rec:true}
+];
+function save(){localStorage.setItem("bos_demo",JSON.stringify(leads))}
+function addLead(){const n=document.getElementById("name").value.trim(),s=document.getElementById("source").value;
+ if(!n)return alert("Enter a name");leads.push({id:Date.now(),n,s,st:"new",cold:false,days:0});document.getElementById("name").value="";save();render()}
+function move(id,delta){const l=leads.find(x=>x.id===id);const i=STAGES.indexOf(l.st)+delta;
+ if(i<0||i>=STAGES.length)return;l.st=STAGES[i];
+ if(l.st==="won"&&l.cold)l.rec=true;
+ if(i>0&&i<4)l.cold=false;save();render()}
+function render(){
+ const board=document.getElementById("board");board.innerHTML="";
+ STAGES.forEach(st=>{
+  const col=document.createElement("div");col.className="col";
+  const list=leads.filter(l=>l.st===st);
+  col.innerHTML=`<h2>${LABELS[st]} <b>${list.length}</b></h2>`;
+  list.forEach(l=>{
+   const d=document.createElement("div");d.className="lead";
+   const due=l.cold?`<div class="due">⚠ No response ${l.days}d — reminder sent</div>`:"";
+   const rec=l.rec?`<div class="ok">↩ Recovered lead</div>`:"";
+   const i=STAGES.indexOf(l.st);
+   const fwd=i<4?`<button onclick="move(${l.id},1)">→</button>`:"";
+   const bck=i>0&&i<5?`<button onclick="move(${l.id},-1)">←</button>`:"";
+   const mark=i===1?`<button onclick="goCold(${l.id})">No answer</button>`:"";
+   d.innerHTML=`<b>${l.n}</b><span class="src">📍 ${l.s}</span>${due}${rec}<div class="btns">${bck}${mark}${fwd}</div>`;
+   col.appendChild(d)});
+  board.appendChild(col)});
+ const won=leads.filter(l=>l.st==="won").length,
+ rec=leads.filter(l=>l.rec).length,
+ cold=leads.filter(l=>l.cold&&STAGES.indexOf(l.st)<4).length;
+ document.getElementById("s-total").textContent=leads.length;
+ document.getElementById("s-won").textContent=won;
+ document.getElementById("s-recovered").textContent=rec;
+ document.getElementById("s-cold").textContent=cold}
+function goCold(id){const l=leads.find(x=>x.id===id);l.cold=true;l.days=Math.max(l.days,1);save();render()}
+function reraExport(){
+ const won=leads.filter(l=>l.st==="won");
+ const negotiating=leads.filter(l=>l.st==="negotiating");
+ const cold=leads.filter(l=>l.cold&&STAGES.indexOf(l.st)<4);
+ let txt=`BUILDER OS — QUARTERLY EXPORT (DEMO)\nProject: Shree Residency, Jaipur\nQuarter: Q2 2026\nGenerated: ${new Date().toLocaleString()}\n\nBOOKINGS THIS QUARTER: ${won.length}\n`;
+ won.forEach((l,i)=>txt+=`  ${i+1}. ${l.n} | Source: ${l.s} | Status: BOOKED\n`);
+ txt+=`\nIN NEGOTIATION: ${negotiating.length}\n`;
+ negotiating.forEach(l=>txt+=`  - ${l.n} | Source: ${l.s}\n`);
+ txt+=`\nFOLLOW-UP REQUIRED (no response): ${cold.length}\n`;
+ cold.forEach(l=>txt+=`  - ${l.n} | ${l.days} days silent\n`);
+ txt+=`\nLEADS BY SOURCE:\n`;
+ const byS={};leads.forEach(l=>byS[l.s]=(byS[l.s]||0)+1);
+ Object.entries(byS).forEach(([s,c])=>txt+=`  ${s}: ${c}\n`);
+ txt+=`\nNOTE: Structured export for CA use. Builder OS provides data\nsystems, not legal or compliance advice.`;
+ document.getElementById("exportTxt").textContent=txt;
+ document.getElementById("modal").classList.add("on")}
+function resetDemo(){localStorage.removeItem("bos_demo");leads=null;location.reload()}
+if(!leads){leads=JSON.parse('[{"id":1,"n":"Ramesh Sharma","s":"Facebook Ad","st":"new","cold":true,"days":4},{"id":2,"n":"Sunita Agarwal","s":"99acres","st":"called","cold":false,"days":0},{"id":3,"n":"Vikas Tomar","s":"Broker (Ram Kaka)","st":"visit","cold":false,"days":0},{"id":4,"n":"Praveen Jain","s":"Facebook Ad","st":"negotiating","cold":true,"days":2,"rec":true},{"id":5,"n":"Deepak Soni","s":"Walk-in","st":"won","cold":false,"days":0,"rec":true}]')}
+save();render();
+</script>
+</body>
+</html>
