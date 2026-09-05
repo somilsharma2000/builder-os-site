@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Builder OS — Working System</title>
 <meta name="description" content="Builder OS working system: lead follow-up, site visits, broker commissions, installment collections and RERA exports. Demo runs in your browser.">
+<meta name="theme-color" content="#0c0e13">
+<link rel="manifest" href="manifest.webmanifest">
 <style>
   :root{
     --ink:#12141a;--card:#171a23;--card2:#1d212d;--line:#272b38;--line2:#323848;
@@ -146,6 +148,7 @@
     <div class="logo">BUILDER<span>OS</span><small>Shree Residency · Jaipur</small></div>
     <div class="hbtns">
       <button class="hbtn" onclick="go('rera')">Export</button>
+      <button class="hbtn" id="langBtn" onclick="toggleLang()">EN / HI</button>
       <button class="hbtn" onclick="resetDemo()">Reset demo</button>
     </div>
   </div>
@@ -422,7 +425,7 @@ function rColl(){
     const pctPaid=Math.min(100,Math.round(paidL(b)/b.totalL*100));
     const rem=b.totalL-paidL(b);
     const acts=b.paidCount<b.months?
-      "<div class='acts'><a class='btn mini wa' target='_blank' href='"+wa(b.phone,"Namaste "+b.buyer+", aapka installment "+money(b.monthlyL)+" due hai ("+next+"). Payment link bhej dein? — Shree Residency")+"'>Remind</a>"+
+      "<div class='acts'><a class='btn mini wa' target='_blank' href='"+wa(b.phone,"Namaste "+b.buyer+", aapka installment "+money(b.monthlyL)+" due hai ("+next+"). Payment link bhej dein? — Shree Residency")+"'>Remind</a><a class='btn mini ghost' href='upi://pay?pa=shreeresidency@upi&am="+(b.monthlyL*100000).toFixed(0)+"&cu=INR&tn="+encodeURIComponent("Installment - "+b.buyer)+"'>Pay link</a>"+
       "<button class='btn mini ghost' onclick='pay("+b.id+")'>Received</button></div>":"<span class='tag green'>Plan complete</span>";
     return "<tr><td><b>"+esc(b.buyer)+"</b><div style='color:var(--mut);font-size:.72rem'>"+esc(b.property)+"</div>"+
       "<div class='prog' style='margin-top:7px'><i class='"+(pctPaid>=100?"full":"")+"' style='width:"+pctPaid+"%'></i></div>"+
@@ -495,6 +498,44 @@ function downloadRera(){
 
 /* ============ misc ============ */
 function resetDemo(){if(confirm("Reset all demo data to the original sample?")){S=seed();save();render(cur);toast("Demo reset");}}
+/* ============ hindi toggle + pwa ============ */
+const HIN=new Map([
+["Dashboard","\u0921\u0948\u0936\u092c\u094b\u0930\u094d\u0921"],["Leads","\u0932\u0940\u0921\u094d\u0938"],
+["Site Visits","\u0938\u093e\u092f\u091f \u0935\u093f\u095b\u093f\u091f"],["Brokers","\u092c\u094d\u0930\u094b\u0915\u0930"],["Collections","\u0915\u0932\u0947\u0915\u094d\u0936\u0928"],
+["+ New Lead","+ \u0928\u0908 \u0932\u0940\u0921"],["+ Schedule Visit","+ \u0935\u093f\u095b\u093f\u091f \u092c\u0941\u0915 \u0915\u0930\u0947\u0902"],
+["+ New Broker","+ \u0928\u092f\u093e \u092c\u094d\u0930\u094b\u0915\u0930"],["+ New Payment Plan","+ \u0928\u092f\u093e \u092a\u0947\u092e\u0947\u0902\u091f \u092a\u094d\u0932\u093e\u0928"],
+["Download CSV for CA","CA \u0915\u0947 \u0932\u093f\u090f CSV \u0921\u093e\u0909\u0928\u0932\u094b\u0921 \u0915\u0930\u0947\u0902"],
+["Owner view \u2014 where your money stands today","\u092e\u093e\u0932\u093f\u0915 \u0935\u094d\u092f\u0942 \u2014 \u0906\u091c \u092a\u0948\u0938\u093e \u0915\u0939\u093e\u0901 \u0939\u0948"],
+["Money position","\u092a\u0948\u0938\u0947 \u0915\u0940 \u0938\u094d\u0925\u093f\u0924\u093f"],
+["Pipeline value","\u092a\u093e\u0907\u092a\u0932\u093e\u0907\u0928 \u0935\u0948\u0932\u094d\u092f\u0942"],
+["Bookings won","\u092c\u0941\u0915\u093f\u0902\u0917 \u091c\u0940\u0924\u0940"],["Recovered","\u0930\u093f\u0915\u0935\u0930"],
+["Overdue now","\u0905\u092d\u0940 \u0913\u0935\u0930\u0921\u094d\u092f\u0942"],["Overdue","\u0913\u0935\u0930\u0921\u094d\u092f\u0942"],
+["Collected","\u0935\u0938\u0942\u0932"],["Booked value","\u092c\u0941\u0915\u094d\u0921 \u0935\u0948\u0932\u094d\u092f\u0942"],
+["Remind","\u0930\u093f\u092e\u093e\u0907\u0902\u0921"],["Received","\u0930\u0938\u0940\u0926 \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902"],
+["Pay link","\u092a\u0947\u092e\u0947\u0902\u091f \u0932\u093f\u0902\u0915"],["Mark paid","\u092d\u0941\u0917\u0924\u093e\u0928 \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902"],
+["Paid \u2014 undo","\u092d\u0941\u0917\u0924\u093e\u0928 \u0939\u0941\u0906 \u2014 \u0935\u093e\u092a\u0938"],
+["Confirm","\u0915\u0928\u094d\u092b\u0930\u094d\u092e"],["Done","\u092a\u0942\u0930\u093e"],["No-show","\u0928\u0939\u0940\u0902 \u0906\u090f"],
+["Cancel","\u0930\u0926\u094d\u0926 \u0915\u0930\u0947\u0902"],["Save","\u0938\u0947\u0935"],
+["Reset demo","\u0930\u0940\u0938\u0947\u091f \u0921\u0947\u092e\u094b"],["Export","\u090f\u0915\u094d\u0938\u092a\u094b\u0930\u094d\u091f"],
+["Full name","\u092a\u0942\u0930\u093e \u0928\u093e\u092e"],["Phone","\u092b\u094b\u0928"],["Source","\u0938\u094b\u0930\u094d\u0938"],
+["Broker","\u092c\u094d\u0930\u094b\u0915\u0930"],["All sources","\u0938\u092d\u0940 \u0938\u094b\u0930\u094d\u0938"],
+["Deal-level attribution (the dispute-killer)","\u0921\u0940\u0932-\u0932\u0947\u0935\u0932 \u090f\u091f\u094d\u0930\u093f\u092c\u094d\u092f\u0942\u0936\u0928 (\u0935\u093f\u0935\u093e\u0926 \u0916\u0924\u094d\u092e)"],
+["Broker payout summary","\u092c\u094d\u0930\u094b\u0915\u0930 \u092a\u0947\u0906\u0909\u091f \u0938\u093e\u0930\u093e\u0902\u0936"],
+["What your CA receives","\u0906\u092a\u0915\u093e CA \u0915\u094d\u092f\u093e \u092a\u093e\u0924\u093e \u0939\u0948"],
+["New Payment Plan","\u0928\u092f\u093e \u092a\u0947\u092e\u0947\u0902\u091f \u092a\u094d\u0932\u093e\u0928"],["New Lead","\u0928\u0908 \u0932\u0940\u0921"],
+["Schedule Site Visit","\u0938\u093e\u0907\u091f \u0935\u093f\u095b\u093f\u091f \u0936\u0947\u0921\u094d\u092f\u0942\u0932 \u0915\u0930\u0947\u0902"],
+["New Broker / Channel Partner","\u0928\u092f\u093e \u092c\u094d\u0930\u094b\u0915\u0930 / \u091a\u0948\u0928\u0932 \u092a\u093e\u0930\u094d\u091f\u0928\u0930"]
+]);
+let LANG=localStorage.getItem("bos_lang")||"en";
+function applyLang(){if(LANG!=="hi")return;
+ document.querySelectorAll("body *").forEach(el=>{if(el.children.length===0){const h=HIN.get(el.textContent.trim());if(h)el.textContent=h;}});}
+function toggleLang(){LANG=LANG==="hi"?"en":"hi";localStorage.setItem("bos_lang",LANG);
+ document.getElementById("langBtn").textContent=LANG==="hi"?"HI / EN":"EN / HI";
+ render(cur);toast(LANG==="hi"?"\u092d\u093e\u0937\u093e \u0939\u093f\u0902\u0926\u0940":"Language: English");}
+const _render=render;
+render=function(p){_render(p);applyLang();};
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}
+
 go(cur);
 </script>
 </body>
