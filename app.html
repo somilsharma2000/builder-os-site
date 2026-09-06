@@ -357,6 +357,8 @@ function newLead(){
     "<div><label>Broker</label><select data-f='brokerId'><option value='0'>Direct (no broker)</option>"+S.brokers.map(b=>"<option value='"+b.id+"'>"+esc(b.name)+"</option>").join("")+"</select></div></div>",
     o=>{
       if(!o.name.trim()||!o.phone.trim()){alert("Name and phone required");return false;}
+      const digits=o.phone.replace(/\D/g,"");if(digits.length<10||digits.length>12){alert("Enter a valid phone number");return false;}
+      if(+o.valueL<0){alert("Estimated value cannot be negative");return false;}
       S.leads.push({id:Date.now(),name:o.name.trim(),phone:o.phone.trim(),source:o.source,brokerId:+o.brokerId,stage:"new",valueL:+o.valueL||0,cold:false,silent:0,wasCold:false,created:today()});
       save();toast("Lead added");});
 }
@@ -405,13 +407,16 @@ function newVisit(){
     "<label>Property / plot</label><input data-f='property' value='Shree Residency'>"+
     "<label>Broker (optional)</label><select data-f='brokerId'><option value='0'>Direct</option>"+S.brokers.map(b=>"<option value='"+b.id+"'>"+esc(b.name)+"</option>").join("")+"</select>",
     o=>{
-      S.visits.push({id:Date.now(),leadId:+o.leadId,date:o.date,time:o.time,property:o.property,brokerId:+o.brokerId,status:"scheduled"});
+      if(!o.date||!o.time||!o.property.trim()){alert("Date, time and property are required");return false;}
+      if(o.date<today()){alert("Choose today or a future date");return false;}
+      S.visits.push({id:Date.now(),leadId:+o.leadId,date:o.date,time:o.time,property:o.property.trim(),brokerId:+o.brokerId,status:"scheduled"});
       const l=S.leads.find(x=>x.id===+o.leadId);if(l&&l.stage==="new")l.stage="called";
+      if(l)log("visit",l.name+" site visit scheduled for "+o.date);
       save();toast("Visit scheduled");});
 }
-function visitDone(id){const v=S.visits.find(x=>x.id===id);v.status="done";const l=S.leads.find(x=>x.id===v.leadId);if(l)log("visit",l.name+" site visit completed");save();render(cur);}
+function visitDone(id){const v=S.visits.find(x=>x.id===id);if(!v||v.status!=="scheduled")return toast("This visit is already closed");v.status="done";const l=S.leads.find(x=>x.id===v.leadId);if(l)log("visit",l.name+" site visit completed");save();render(cur);}
 function visitNo(id){
-  const v=S.visits.find(x=>x.id===id);v.status="noshow";
+  const v=S.visits.find(x=>x.id===id);if(!v||v.status!=="scheduled")return toast("This visit is already closed");v.status="noshow";
   const l=S.leads.find(x=>x.id===v.leadId);if(l){l.cold=true;l.silent=1;if(l.stage==="new")l.stage="called";log("visit",l.name+" missed site visit and returned to follow-up");}
   save();toast("Lead returned to follow-up list");render(cur);
 }
@@ -440,11 +445,11 @@ function newBroker(){
   openForm("New Broker / Channel Partner",
     "<label>Name / firm</label><input data-f='name'>"+
     "<div class='frow'><div><label>Phone</label><input data-f='phone' inputmode='numeric'></div><div><label>Commission %</label><input data-f='pct' type='number' step='0.1' value='1.5'></div></div>",
-    o=>{if(!o.name.trim()){alert("Name required");return false;}
-      S.brokers.push({id:Date.now(),name:o.name.trim(),phone:o.phone.trim(),pct:+o.pct||1.5,paid:false});
-      save();toast("Broker added");});
+    o=>{const pct=+o.pct;if(!o.name.trim()){alert("Name required");return false;}if(!Number.isFinite(pct)||pct<0||pct>100){alert("Commission must be between 0 and 100");return false;}
+      S.brokers.push({id:Date.now(),name:o.name.trim(),phone:o.phone.trim(),pct,paid:false});
+      log("broker",o.name.trim()+" added as channel partner");save();toast("Broker added");});
 }
-function togglePaid(id){const b=S.brokers.find(x=>x.id===id);b.paid=!b.paid;save();render(cur);}
+function togglePaid(id){const b=S.brokers.find(x=>x.id===id);if(!b)return;b.paid=!b.paid;log("broker",b.name+" payout "+(b.paid?"marked paid":"reopened"));save();render(cur);}
 
 /* ============ COLLECTIONS ============ */
 function rColl(){
@@ -486,12 +491,14 @@ function newBooking(){
     o=>{
       const l=S.leads.find(x=>x.id===+o.leadId);
       const totalL=+o.totalL,advanceL=+o.advanceL,monthlyL=+o.monthlyL;
-      if(!totalL||!monthlyL){alert("Total and monthly required");return false;}
+      if(!l||!totalL||!monthlyL||!o.firstDue){alert("Buyer, total, monthly amount and first due date are required");return false;}
+      if(advanceL<0||advanceL>totalL){alert("Advance cannot exceed the deal total");return false;}
       const months=o.months?+o.months:Math.ceil((totalL-advanceL)/monthlyL);
-      S.bookings.push({id:Date.now(),buyer:l.name,phone:l.phone,property:o.property,brokerId:l.brokerId,totalL,advanceL,monthlyL,months,paidCount:0,firstDue:o.firstDue,created:today()});
-      save();toast("Plan created — "+months+" months");});
+      if(!Number.isInteger(months)||months<1){alert("Number of months must be at least 1");return false;}
+      S.bookings.push({id:Date.now(),buyer:l.name,phone:l.phone,property:o.property.trim(),brokerId:l.brokerId,totalL,advanceL,monthlyL,months,paidCount:0,firstDue:o.firstDue,created:today()});
+      log("collection",l.name+" payment plan created: "+money(totalL));save();toast("Plan created — "+months+" months");});
 }
-function pay(id){const b=S.bookings.find(x=>x.id===id);b.paidCount++;log("collection",b.buyer+" payment received: "+money(b.monthlyL));save();toast("Recorded — "+money(b.monthlyL)+" received");render(cur);}
+function pay(id){const b=S.bookings.find(x=>x.id===id);if(!b||b.paidCount>=b.months)return toast("This payment plan is already complete");b.paidCount++;log("collection",b.buyer+" payment received: "+money(b.monthlyL));save();toast("Recorded — "+money(b.monthlyL)+" received");render(cur);}
 
 /* ============ LEAD DETAIL + ROI REPORT ============ */
 function viewLead(id){
@@ -519,7 +526,7 @@ function rReport(){
 }
 
 /* ============ HOW TO USE ============ */
-function rGuide(){document.getElementById("p-guide").innerHTML="<div class='ptitle'><div><h1>How to use Builder OS</h1><p>A 5-minute operating guide for the owner and sales team</p></div></div>"+"<div class='insight'><strong>THE PROMISE</strong><p>Every entry should lead to one of three outcomes: a follow-up, a site visit, or money collected.</p></div>"+"<div class='panel'><h3>Daily routine — 15 minutes</h3><div class='row'><div><b>1. Open Dashboard</b><div class='sub'>Start with the action plan and overdue collection alert.</div></div><span class='tag gold'>Morning</span></div><div class='row'><div><b>2. Clear silent leads</b><div class='sub'>Open the highest Priority score first. Call or WhatsApp, then advance the stage or tap no answer.</div></div><span class='tag'>Sales</span></div><div class='row'><div><b>3. Confirm visits</b><div class='sub'>Confirm before the visit, Done after it, or No-show to restart follow-up.</div></div><span class='tag'>Visits</span></div><div class='row'><div><b>4. Check collections</b><div class='sub'>Mark every receipt the same day. Remind buyers before the due date.</div></div><span class='tag'>Cash</span></div></div>"+"<div class='panel'><h3>Weekly owner review</h3><div class='row'><div><b>Pipeline</b><div class='sub'>Which source creates visits? Which leads have the most recoverable value?</div></div></div><div class='row'><div><b>Brokers</b><div class='sub'>Every won deal must have attribution before settlement. Mark payouts only after approval.</div></div></div><div class='row'><div><b>ROI Report</b><div class='sub'>Review recovered value, overdue risk, collections, and next actions. Print it for the weekly meeting.</div></div></div></div>"+"<div class='panel'><h3>What this replaces</h3><div class='row'><div>WhatsApp lead hunting</div><div class='gold'>One searchable lead board</div></div><div class='row'><div>Broker settlement arguments</div><div class='gold'>Deal-level attribution</div></div><div class='row'><div>Missed installment follow-ups</div><div class='gold'>Due-date collection queue</div></div><div class='row'><div>Quarter-end spreadsheet scramble</div><div class='gold'>CA-ready RERA export</div></div></div>"+"<p class='note'>Demo data stays in this browser. Before a paid pilot, import real leads, brokers and payment plans, confirm numbers with the owner, and reconcile reports with the builder's books.</p>";}
+function rGuide(){document.getElementById("p-guide").innerHTML="<div class='ptitle'><div><h1>How to use Builder OS</h1><p>A 5-minute operating guide for the owner and sales team</p></div></div>"+"<div class='insight'><strong>THE PROMISE</strong><p>Every entry should lead to one of three outcomes: a follow-up, a site visit, or money collected.</p></div>"+"<div class='panel'><h3>Daily routine — 15 minutes</h3><div class='row'><div><b>1. Open Dashboard</b><div class='sub'>Start with the action plan and overdue collection alert.</div></div><span class='tag gold'>Morning</span></div><div class='row'><div><b>2. Clear silent leads</b><div class='sub'>Open the highest Priority score first. Call or WhatsApp, then advance the stage or tap no answer.</div></div><span class='tag'>Sales</span></div><div class='row'><div><b>3. Confirm visits</b><div class='sub'>Confirm before the visit, Done after it, or No-show to restart follow-up.</div></div><span class='tag'>Visits</span></div><div class='row'><div><b>4. Check collections</b><div class='sub'>Mark every receipt the same day. Remind buyers before the due date.</div></div><span class='tag'>Cash</span></div></div>"+"<div class='panel'><h3>Weekly owner review</h3><div class='row'><div><b>Pipeline</b><div class='sub'>Which source creates visits? Which leads have the most recoverable value?</div></div></div><div class='row'><div><b>Brokers</b><div class='sub'>Every won deal must have attribution before settlement. Mark payouts only after approval.</div></div></div><div class='row'><div><b>ROI Report</b><div class='sub'>Review recovered value, overdue risk, collections, and next actions. Print it for the weekly meeting.</div></div></div></div>"+"<div class='panel'><h3>What this replaces</h3><div class='row'><div>WhatsApp lead hunting</div><div class='gold'>One searchable lead board</div></div><div class='row'><div>Broker settlement arguments</div><div class='gold'>Deal-level attribution</div></div><div class='row'><div>Missed installment follow-ups</div><div class='gold'>Due-date collection queue</div></div><div class='row'><div>Quarter-end spreadsheet scramble</div><div class='gold'>CA-ready RERA export</div></div></div>"+"<p class='note'>This public demo stores data only in this browser and is not connected to the BuilderLead entity. For a paid client, use the secure production deployment with login, backups and team roles; never put real client data into this public demo.</p>";}
 
 /* ============ RERA ============ */
 function qStart(){const n=new Date();return new Date(n.getFullYear(),Math.floor(n.getMonth()/3)*3,1).toISOString().slice(0,10);}
