@@ -173,6 +173,7 @@
     <button class="tab" data-p="collections" onclick="go('collections')">Collections</button>
     <button class="tab" data-p="rera" onclick="go('rera')">RERA Export</button>
     <button class="tab" data-p="report" onclick="go('report')">ROI Report</button>
+    <button class="tab" data-p="guide" onclick="go('guide')">How to use</button>
   </div>
 </header>
 <div class="banner">Working demo — all data stays in <b>your browser only</b>. Nothing is sent anywhere. In the live product this is your real project on a secure server.</div>
@@ -185,6 +186,7 @@
   <div class="page" id="p-collections"></div>
   <div class="page" id="p-rera"></div>
   <div class="page" id="p-report"></div>
+  <div class="page" id="p-guide"></div>
 </div>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
@@ -259,7 +261,7 @@ function go(p){cur=p;localStorage.setItem("bos_tab",p);
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.p===p));
   render(p);
 }
-function render(p){({"dash":rDash,"leads":rLeads,"visits":rVisits,"brokers":rBrokers,"collections":rColl,"rera":rRera,"report":rReport})[p]();}
+function render(p){({"dash":rDash,"leads":rLeads,"visits":rVisits,"brokers":rBrokers,"collections":rColl,"rera":rRera,"report":rReport,"guide":rGuide})[p]();}
 
 /* ============ modal ============ */
 function closeModal(){document.getElementById("modal").classList.remove("on");}
@@ -516,6 +518,9 @@ function rReport(){
     "<p class='note'>Figures marked estimated are directional and should be reconciled with the builder's books before use in a formal financial or RERA filing. Builder OS is a data-management service, not legal or tax advice.</p></div>";
 }
 
+/* ============ HOW TO USE ============ */
+function rGuide(){document.getElementById("p-guide").innerHTML="<div class='ptitle'><div><h1>How to use Builder OS</h1><p>A 5-minute operating guide for the owner and sales team</p></div></div>"+"<div class='insight'><strong>THE PROMISE</strong><p>Every entry should lead to one of three outcomes: a follow-up, a site visit, or money collected.</p></div>"+"<div class='panel'><h3>Daily routine — 15 minutes</h3><div class='row'><div><b>1. Open Dashboard</b><div class='sub'>Start with the action plan and overdue collection alert.</div></div><span class='tag gold'>Morning</span></div><div class='row'><div><b>2. Clear silent leads</b><div class='sub'>Open the highest Priority score first. Call or WhatsApp, then advance the stage or tap no answer.</div></div><span class='tag'>Sales</span></div><div class='row'><div><b>3. Confirm visits</b><div class='sub'>Confirm before the visit, Done after it, or No-show to restart follow-up.</div></div><span class='tag'>Visits</span></div><div class='row'><div><b>4. Check collections</b><div class='sub'>Mark every receipt the same day. Remind buyers before the due date.</div></div><span class='tag'>Cash</span></div></div>"+"<div class='panel'><h3>Weekly owner review</h3><div class='row'><div><b>Pipeline</b><div class='sub'>Which source creates visits? Which leads have the most recoverable value?</div></div></div><div class='row'><div><b>Brokers</b><div class='sub'>Every won deal must have attribution before settlement. Mark payouts only after approval.</div></div></div><div class='row'><div><b>ROI Report</b><div class='sub'>Review recovered value, overdue risk, collections, and next actions. Print it for the weekly meeting.</div></div></div></div>"+"<div class='panel'><h3>What this replaces</h3><div class='row'><div>WhatsApp lead hunting</div><div class='gold'>One searchable lead board</div></div><div class='row'><div>Broker settlement arguments</div><div class='gold'>Deal-level attribution</div></div><div class='row'><div>Missed installment follow-ups</div><div class='gold'>Due-date collection queue</div></div><div class='row'><div>Quarter-end spreadsheet scramble</div><div class='gold'>CA-ready RERA export</div></div></div>"+"<p class='note'>Demo data stays in this browser. Before a paid pilot, import real leads, brokers and payment plans, confirm numbers with the owner, and reconcile reports with the builder's books.</p>";}
+
 /* ============ RERA ============ */
 function qStart(){const n=new Date();return new Date(n.getFullYear(),Math.floor(n.getMonth()/3)*3,1).toISOString().slice(0,10);}
 function inQ(ds){return ds>=qStart();}
@@ -550,7 +555,7 @@ function downloadRera(){
 /* ============ misc ============ */
 function resetDemo(){if(confirm("Reset all demo data to the original sample?")){S=seed();save();render(cur);toast("Demo reset");}}
 /* ============ hindi toggle + pwa ============ */
-const HIN=new Map([
+const HIN=new Map([["RERA Export","रेरा एक्सपोर्ट"],["ROI Report","आरओआई रिपोर्ट"],["How to use","कैसे उपयोग करें"],
 ["Dashboard","\u0921\u0948\u0936\u092c\u094b\u0930\u094d\u0921"],["Leads","\u0932\u0940\u0921\u094d\u0938"],
 ["Site Visits","\u0938\u093e\u092f\u091f \u0935\u093f\u095b\u093f\u091f"],["Brokers","\u092c\u094d\u0930\u094b\u0915\u0930"],["Collections","\u0915\u0932\u0947\u0915\u094d\u0936\u0928"],
 ["+ New Lead","+ \u0928\u0908 \u0932\u0940\u0921"],["+ Schedule Visit","+ \u0935\u093f\u095b\u093f\u091f \u092c\u0941\u0915 \u0915\u0930\u0947\u0902"],
@@ -578,8 +583,13 @@ const HIN=new Map([
 ["New Broker / Channel Partner","\u0928\u092f\u093e \u092c\u094d\u0930\u094b\u0915\u0930 / \u091a\u0948\u0928\u0932 \u092a\u093e\u0930\u094d\u091f\u0928\u0930"]
 ]);
 let LANG=localStorage.getItem("bos_lang")||"en";
-function applyLang(){if(LANG!=="hi")return;
- document.querySelectorAll("body *").forEach(el=>{if(el.children.length===0){const h=HIN.get(el.textContent.trim());if(h)el.textContent=h;}});}
+function applyLang(){
+ document.documentElement.lang=LANG==="hi"?"hi":"en";
+ document.querySelectorAll("body *").forEach(el=>{if(el.children.length===0){
+   if(!el.dataset.enText)el.dataset.enText=el.textContent.trim();
+   const en=el.dataset.enText; el.textContent=LANG==="hi"?(HIN.get(en)||en):en;
+ }});
+}
 function toggleLang(){LANG=LANG==="hi"?"en":"hi";localStorage.setItem("bos_lang",LANG);
  document.getElementById("langBtn").textContent=LANG==="hi"?"HI / EN":"EN / HI";
  render(cur);toast(LANG==="hi"?"\u092d\u093e\u0937\u093e \u0939\u093f\u0902\u0926\u0940":"Language: English");}
