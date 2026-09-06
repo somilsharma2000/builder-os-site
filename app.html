@@ -585,6 +585,8 @@ const HIN=new Map([["RERA Export","रेरा एक्सपोर्ट"],["
 let LANG=localStorage.getItem("bos_lang")||"en";
 function applyLang(){
  document.documentElement.lang=LANG==="hi"?"hi":"en";
+ const tabs={dash:["Dashboard","डैशबोर्ड"],leads:["Leads","लीड्स"],visits:["Site Visits","साइट विज़िट"],brokers:["Brokers","ब्रोकर"],collections:["Collections","कलेक्शन"],rera:["RERA Export","रेरा एक्सपोर्ट"],report:["ROI Report","आरओआई रिपोर्ट"],guide:["How to use","कैसे उपयोग करें"]};
+ document.querySelectorAll(".tab[data-p]").forEach(el=>{const v=tabs[el.dataset.p];if(v)el.textContent=LANG==="hi"?v[1]:v[0];});
  document.querySelectorAll("body *").forEach(el=>{if(el.children.length===0){
    if(!el.dataset.enText)el.dataset.enText=el.textContent.trim();
    const en=el.dataset.enText; el.textContent=LANG==="hi"?(HIN.get(en)||en):en;
