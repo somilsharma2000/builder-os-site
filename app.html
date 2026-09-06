@@ -138,6 +138,19 @@
   .vgroup h5{font-size:.66rem;color:var(--mut);text-transform:uppercase;letter-spacing:1.2px;margin:0 0 8px 4px;font-weight:700}
   .vgroup h5.today{color:var(--gold)}
 
+  .score{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;border-radius:99px;padding:3px 7px;margin-top:5px;font-weight:700}
+  .score.hot{color:var(--red);background:var(--redsoft);border:1px solid rgba(224,96,96,.35)}
+  .score.warm{color:var(--gold);background:var(--goldsoft);border:1px solid rgba(217,164,65,.35)}
+  .score.cool{color:var(--mut);background:rgba(255,255,255,.04);border:1px solid var(--line)}
+  .activity{display:flex;gap:10px;align-items:flex-start;padding:9px 2px;border-bottom:1px solid var(--line);font-size:.78rem}
+  .activity:last-child{border-bottom:0}.activity b{color:var(--text)}.activity time{color:var(--mut2);font-size:.68rem;margin-left:auto;white-space:nowrap}
+  .insight{background:linear-gradient(135deg,rgba(217,164,65,.12),rgba(217,164,65,.03));border:1px solid rgba(217,164,65,.25);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+  .insight strong{color:var(--gold);font-size:.78rem}.insight p{font-size:.78rem;color:var(--mut);margin-top:3px}
+  .reporthead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .reporthead h2{font-size:1.35rem}.reporthead p{color:var(--mut);font-size:.76rem;margin-top:3px}
+  .reportgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+  .reportmetric{background:rgba(255,255,255,.03);border:1px solid var(--line);padding:13px;border-radius:10px}.reportmetric b{font-size:1.18rem;color:var(--gold);display:block}.reportmetric span{color:var(--mut);font-size:.7rem}
+  @media print{header,.banner,.no-print,.note{display:none!important}body{background:white;color:#111}.page{display:none!important}.page#p-report{display:block!important}.panel,.kpi,.reportmetric{background:white;border-color:#ddd;color:#111}.reporthead p,.reportmetric span{color:#666}.gold,.reportmetric b{color:#8a6116}}
   .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--card2);border:1px solid var(--gold);color:var(--gold);border-radius:11px;padding:11px 22px;font-size:.8rem;z-index:200;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 12px 40px rgba(0,0,0,.5);font-weight:600}
   .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -159,6 +172,7 @@
     <button class="tab" data-p="brokers" onclick="go('brokers')">Brokers</button>
     <button class="tab" data-p="collections" onclick="go('collections')">Collections</button>
     <button class="tab" data-p="rera" onclick="go('rera')">RERA Export</button>
+    <button class="tab" data-p="report" onclick="go('report')">ROI Report</button>
   </div>
 </header>
 <div class="banner">Working demo — all data stays in <b>your browser only</b>. Nothing is sent anywhere. In the live product this is your real project on a secure server.</div>
@@ -170,6 +184,7 @@
   <div class="page" id="p-brokers"></div>
   <div class="page" id="p-collections"></div>
   <div class="page" id="p-rera"></div>
+  <div class="page" id="p-report"></div>
 </div>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
@@ -178,7 +193,7 @@
 <script>
 "use strict";
 /* ============ data ============ */
-const KEY="bos_app_v2";
+const KEY="bos_app_v3";
 const STAGES=["new","called","visit","negotiating","won","lost"];
 const LBL={new:"New",called:"Called",visit:"Visit booked",negotiating:"Negotiating",won:"Won",lost:"Lost"};
 const SOURCES=["Facebook Ad","Google","99acres","Broker","Walk-in","Referral","Hoardings"];
@@ -186,6 +201,7 @@ function d(off){const t=new Date();t.setDate(t.getDate()+off);return t.toISOStri
 function today(){return d(0);}
 function money(l){return "Rs "+(l>=100?(l/100).toFixed(1)+" Cr":l.toFixed(1)+" L");}
 let S=null,cur=localStorage.getItem("bos_tab")||"dash",q="",srcF="all";
+function log(type,text){S.activities=S.activities||[];S.activities.unshift({id:Date.now()+Math.random(),type,text,at:new Date().toISOString()});S.activities=S.activities.slice(0,80);}
 function seed(){
   return {
     brokers:[
@@ -213,6 +229,11 @@ function seed(){
       {id:1,buyer:"Deepak Soni",phone:"9829088888",property:"Plot 22, Shree Residency",brokerId:0,totalL:42,advanceL:8,monthlyL:2.5,months:13,paidCount:1,firstDue:d(-5),created:d(-40)},
       {id:2,buyer:"Manish Gupta",phone:"9829099999",property:"Villa 3, Shree Residency",brokerId:3,totalL:75,advanceL:15,monthlyL:5,months:12,paidCount:2,firstDue:d(-15),created:d(-55)},
       {id:3,buyer:"Ankit Vyas",phone:"9829144444",property:"Plot 08, Shree Residency",brokerId:1,totalL:36,advanceL:6,monthlyL:2.5,months:12,paidCount:1,firstDue:d(-38),created:d(-70)}
+    ],
+    activities:[
+      {id:1,type:"system",text:"Workspace created with sample project data",at:new Date().toISOString()},
+      {id:2,type:"collection",text:"Ankit Vyas installment is overdue",at:new Date(Date.now()-86400000).toISOString()},
+      {id:3,type:"lead",text:"Deepak Soni converted after a silent period",at:new Date(Date.now()-4*86400000).toISOString()}
     ]
   };
 }
@@ -238,7 +259,7 @@ function go(p){cur=p;localStorage.setItem("bos_tab",p);
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.p===p));
   render(p);
 }
-function render(p){({"dash":rDash,"leads":rLeads,"visits":rVisits,"brokers":rBrokers,"collections":rColl,"rera":rRera})[p]();}
+function render(p){({"dash":rDash,"leads":rLeads,"visits":rVisits,"brokers":rBrokers,"collections":rColl,"rera":rRera,"report":rReport})[p]();}
 
 /* ============ modal ============ */
 function closeModal(){document.getElementById("modal").classList.remove("on");}
@@ -291,6 +312,8 @@ function rDash(){
     "<div class='row'><div>Broker commissions payable (on won deals)</div><div class='gold'>"+money(commDue)+"</div></div>"+
     "<div class='row'><div>Installments overdue</div><div style='color:"+(odAmt?"var(--red)":"var(--green)")+";font-weight:700'>"+(odAmt?money(odAmt):"None")+"</div></div>"+
     "<div class='row'><div>Active payment plans</div><div class='gold'>"+S.bookings.filter(b=>b.paidCount<b.months).length+" of "+S.bookings.length+"</div></div></div>"+
+  "<div class='insight'><strong>OWNER ACTION PLAN</strong><p>"+(coldNow.length?coldNow.length+" follow-up(s) need attention today. Start with "+esc(coldNow.sort((a,b)=>b.valueL-a.valueL)[0].name)+" — highest recoverable value.":"No urgent lead follow-ups. Review collections before the next site visit.")+"</p></div>"+
+  "<div class='panel'><h3>Recent activity — proof the process is moving</h3>"+((S.activities||[]).slice(0,5).map(a=>"<div class='activity'><span>"+esc(a.text)+"</span><time>"+new Date(a.at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})+"</time></div>").join("")||"<div class='empty'>No activity yet.</div>")+"</div>"+
   "<p class='note'>Updates the moment your staff updates a lead. No more asking \"kya chal raha hai?\" — the answer is here.</p>";
 }
 
@@ -306,13 +329,15 @@ function rLeads(){
       const fwd=(i<4)?"<button class='mv' onclick=\"move("+l.id+",1)\">advance &rsaquo;</button>":"";
       const na=(st==="called")?"<button class='mv' style='color:var(--red);border-color:#5a2e2e' onclick='noAns("+l.id+")'>no answer</button>":"";
       const waB=(st!=="won"&&st!=="lost")?"<a class='btn mini wa' target='_blank' href='"+wa(l.phone,"Namaste "+l.name+", Shree Residency, Jaipur ke baare mein baat ho rahi thi.")+"'>WhatsApp</a>":"";
-      return "<div class='leadcard'><b>"+esc(l.name)+"</b>"+
+      const score=Math.min(99,Math.round((l.valueL||0)*.55+(l.cold?18:0)+(l.stage==="negotiating"?22:0)+(l.source==="Facebook Ad"?8:0)));
+      const scoreCls=score>=65?"hot":score>=40?"warm":"cool";
+      return "<div class='leadcard'><b>"+esc(l.name)+"</b><span class='score "+scoreCls+"'>Priority "+score+"/99</span>"+
         "<span class='tag'>"+esc(l.source)+"</span> "+
         (l.brokerId?"<span class='tag gold'>"+esc(brokerName(l.brokerId))+"</span>":"")+
         (l.valueL?"<span class='tag'>est "+money(l.valueL)+"</span>":"")+
         (l.cold?"<div class='alert'>Silent "+l.silent+" day(s) — follow-up due</div>":"")+
         (l.wasCold&&l.stage==="won"?"<div class='rec'>Recovered lead</div>":"")+
-        "<div class='acts'>"+back+na+fwd+waB+"</div></div>";
+        "<div class='acts'>"+back+na+fwd+"<button class='mv' onclick=\"viewLead("+l.id+")\">details</button>"+waB+"</div></div>";
     }).join("")+"</div>";
   });
   document.getElementById("p-leads").innerHTML=
@@ -338,9 +363,10 @@ function move(id,dir){
   if(i<0||i>=STAGES.length)return;
   if(STAGES[i]==="won"){l.wasCold=l.wasCold||l.cold;toast("Won — create the payment plan in Collections.");}
   l.stage=STAGES[i];l.cold=false;l.silent=0;
+  log("lead",l.name+" moved to "+LBL[l.stage]);
   save();render(cur);
 }
-function noAns(id){const l=S.leads.find(x=>x.id===id);l.cold=true;l.silent=Math.max(1,l.silent+1);save();toast("Follow-up clock started");render(cur);}
+function noAns(id){const l=S.leads.find(x=>x.id===id);l.cold=true;l.silent=Math.max(1,l.silent+1);log("lead",l.name+" marked no-answer (silent "+l.silent+" days)");save();toast("Follow-up clock started");render(cur);}
 
 /* ============ VISITS ============ */
 function rVisits(){
@@ -381,10 +407,10 @@ function newVisit(){
       const l=S.leads.find(x=>x.id===+o.leadId);if(l&&l.stage==="new")l.stage="called";
       save();toast("Visit scheduled");});
 }
-function visitDone(id){const v=S.visits.find(x=>x.id===id);v.status="done";save();render(cur);}
+function visitDone(id){const v=S.visits.find(x=>x.id===id);v.status="done";const l=S.leads.find(x=>x.id===v.leadId);if(l)log("visit",l.name+" site visit completed");save();render(cur);}
 function visitNo(id){
   const v=S.visits.find(x=>x.id===id);v.status="noshow";
-  const l=S.leads.find(x=>x.id===v.leadId);if(l){l.cold=true;l.silent=1;if(l.stage==="new")l.stage="called";}
+  const l=S.leads.find(x=>x.id===v.leadId);if(l){l.cold=true;l.silent=1;if(l.stage==="new")l.stage="called";log("visit",l.name+" missed site visit and returned to follow-up");}
   save();toast("Lead returned to follow-up list");render(cur);
 }
 
@@ -463,7 +489,32 @@ function newBooking(){
       S.bookings.push({id:Date.now(),buyer:l.name,phone:l.phone,property:o.property,brokerId:l.brokerId,totalL,advanceL,monthlyL,months,paidCount:0,firstDue:o.firstDue,created:today()});
       save();toast("Plan created — "+months+" months");});
 }
-function pay(id){const b=S.bookings.find(x=>x.id===id);b.paidCount++;save();toast("Recorded — "+money(b.monthlyL)+" received");render(cur);}
+function pay(id){const b=S.bookings.find(x=>x.id===id);b.paidCount++;log("collection",b.buyer+" payment received: "+money(b.monthlyL));save();toast("Recorded — "+money(b.monthlyL)+" received");render(cur);}
+
+/* ============ LEAD DETAIL + ROI REPORT ============ */
+function viewLead(id){
+  const l=S.leads.find(x=>x.id===id);if(!l)return;
+  const score=Math.min(99,Math.round((l.valueL||0)*.55+(l.cold?18:0)+(l.stage==="negotiating"?22:0)+(l.source==="Facebook Ad"?8:0)));
+  const acts=(S.activities||[]).filter(a=>a.text.includes(l.name));
+  openForm("Lead intelligence — "+esc(l.name),"<div class='insight'><strong>Priority score "+score+"/99</strong><p>Estimated opportunity: "+money(l.valueL)+" · Current stage: "+LBL[l.stage]+"</p></div>"+
+    "<div class='row'><div>Phone</div><b>"+esc(l.phone)+"</b></div><div class='row'><div>Source</div><b>"+esc(l.source)+"</b></div><div class='row'><div>Broker attribution</div><b>"+esc(brokerName(l.brokerId))+"</b></div><div class='row'><div>Follow-up state</div><b>"+(l.cold?"Silent for "+l.silent+" day(s)":"Active")+"</b></div>"+
+    "<label>Manager note</label><input data-f='note' placeholder='e.g. promised callback Tuesday'>"+
+    (acts.length?"<div style='margin-top:12px'><h3>Lead history</h3>"+acts.slice(0,6).map(a=>"<div class='activity'>"+esc(a.text)+"<time>"+new Date(a.at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})+"</time></div>").join("")+"</div>":""),o=>{if(o.note&&o.note.trim()){log("note",l.name+": "+o.note.trim());save();toast("Note saved");}});
+}
+function rReport(){
+  const won=S.leads.filter(l=>l.stage==="won"),coldWon=S.leads.filter(l=>l.wasCold&&l.stage==="won"),active=S.leads.filter(l=>["new","called","visit","negotiating"].includes(l.stage));
+  const wonVal=won.reduce((a,l)=>a+l.valueL,0),recoveredVal=coldWon.reduce((a,l)=>a+l.valueL,0);
+  const collected=S.bookings.reduce((a,b)=>a+paidL(b),0),overdue=S.bookings.reduce((a,b)=>a+(bookingOverdue(b)?b.monthlyL*overdueCount(b):0),0);
+  const comm=S.leads.filter(l=>l.stage==="won"&&l.brokerId).reduce((a,l)=>{const b=S.brokers.find(x=>x.id===l.brokerId);return a+(b?l.valueL*b.pct/100:0)},0);
+  const reportCost=50,roi=recoveredVal?Math.round(recoveredVal*100/reportCost):0;
+  document.getElementById("p-report").innerHTML="<div class='ptitle no-print'><div><h1>ROI Report</h1><p>Print-ready owner report — the proof behind the annual renewal</p></div><button class='btn' onclick='window.print()'>Print / save PDF</button></div>"+
+    "<div class='panel'><div class='reporthead'><div><h2>Shree Residency</h2><p>Builder OS 90-day performance report · Generated "+new Date().toLocaleDateString('en-IN')+"</p></div><div class='gold'>BEYOND PIXELS</div></div>"+
+    "<div class='insight'><strong>EXECUTIVE RESULT</strong><p>Builder OS has created a single operating view across "+S.leads.length+" leads, "+S.visits.length+" site visits and "+S.bookings.length+" payment plans. The owner can now see revenue at risk before it disappears.</p></div>"+
+    "<div class='reportgrid'>"+kpi("Opportunity recovered",money(recoveredVal),coldWon.length+" silent lead(s) converted")+kpi("Bookings won",money(wonVal),won.length+" deals")+kpi("Collected",money(collected),"recorded on payment plans")+kpi("Overdue risk",overdue?money(overdue):"None",overdue?"requires action":"all clear")+"</div>"+
+    "<div class='panel'><h3>Business outcomes</h3><div class='row'><div>Estimated value recovered from previously silent leads</div><div class='gold'>"+money(recoveredVal)+"</div></div><div class='row'><div>Broker commissions calculated and attributed</div><div class='gold'>"+money(comm)+"</div></div><div class='row'><div>Active opportunities still in pipeline</div><div class='gold'>"+active.length+" · "+money(active.reduce((a,l)=>a+l.valueL,0))+" potential</div></div><div class='row'><div>Illustrative recovery vs ₹50K pilot</div><div class='gold'>"+(roi?roi+"× recovered value":"Evidence accumulating")+"</div></div></div>"+
+    "<div class='panel'><h3>What changes next</h3><p style='font-size:.8rem;color:var(--mut);line-height:1.7'>Continue the weekly operating rhythm: clear the follow-up queue, collect overdue installments before the next due date, and export the RERA data for the CA each quarter. The system is only valuable when the team uses it every day — that is the managed service Builder OS provides.</p></div>"+
+    "<p class='note'>Figures marked estimated are directional and should be reconciled with the builder's books before use in a formal financial or RERA filing. Builder OS is a data-management service, not legal or tax advice.</p></div>";
+}
 
 /* ============ RERA ============ */
 function qStart(){const n=new Date();return new Date(n.getFullYear(),Math.floor(n.getMonth()/3)*3,1).toISOString().slice(0,10);}
