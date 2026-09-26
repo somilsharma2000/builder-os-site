@@ -31,7 +31,7 @@
   nav{display:flex;gap:22px;align-items:center;font-size:.85rem}
   nav a{color:var(--mut);text-decoration:none}
   nav a:hover{color:#fff}
-  .cta-mini{background:var(--gloss),linear-gradient(160deg,#6183D1,#3861C1);color:#050911;font-weight:700;padding:9px 18px;border-radius:100px;text-decoration:none;font-size:.85rem;box-shadow:0 8px 26px rgba(0, 102, 255,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+  .cta-mini{background:var(--gloss),linear-gradient(160deg,#338CFF,#0052CC);color:#fff;font-weight:700;padding:9px 18px;border-radius:100px;text-decoration:none;font-size:.85rem;box-shadow:0 8px 26px rgba(0, 102, 255,.35),inset 0 1px 0 rgba(255,255,255,.25)}
   .hero{padding:88px 0 60px;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 60% 45% at 50% -8%,rgba(0, 102, 255,.3),transparent 70%),radial-gradient(ellipse 28% 24% at 82% 6%,rgba(0, 102, 255,.08),transparent 70%),var(--bg)}
   .hero::before{content:"";position:absolute;inset:0;mask-image:radial-gradient(ellipse 70% 62% at 50% 35%,#000 20%,transparent 70%);pointer-events:none}
   .kicker{background:linear-gradient(110deg,#9CC0FF,#4D94FF);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
@@ -117,6 +117,14 @@
 @media(max-width:760px){.mock-body{grid-template-columns:1fr}.mock-side{flex-direction:row;overflow:auto;border-right:none;border-bottom:1px solid rgba(139,172,250,.09)}.mock-kpis{grid-template-columns:repeat(2,1fr)}.mock-panels{grid-template-columns:1fr}}
 
 .card,.step,.process .step{box-shadow:0 12px 34px rgba(0,0,0,.4)}
+
+/* at-rest life (ONE DESIGN law: visible without hover) */
+.mock-wrap{animation:mockfloat 8s ease-in-out infinite}
+@keyframes mockfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.cta{animation:ctaglow 3.2s ease-in-out infinite}
+@keyframes ctaglow{0%,100%{box-shadow:0 12px 40px rgba(0,102,255,.45),inset 0 1px 0 rgba(255,255,255,.18)}50%{box-shadow:0 12px 54px rgba(0,102,255,.72),0 0 24px rgba(0,102,255,.35),inset 0 1px 0 rgba(255,255,255,.18)}}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
   <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://somilsharma2000.github.io/beyond-pixells/#org", "name": "Beyond Pixells", "url": "https://somilsharma2000.github.io/beyond-pixells/"}, {"@type": "SoftwareApplication", "@id": "https://somilsharma2000.github.io/builder-os-site/#app", "name": "Builder OS", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Operating system for real-estate builders and developers: project milestones, inventory, broker and customer follow-ups, WhatsApp automation, milestone-linked fee collection and a branded website included.", "url": "https://somilsharma2000.github.io/builder-os-site/", "publisher": {"@type": "Organization", "@id": "https://somilsharma2000.github.io/beyond-pixells/#org", "name": "Beyond Pixells", "url": "https://somilsharma2000.github.io/beyond-pixells/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Beyond Pixells", "item": "https://somilsharma2000.github.io/beyond-pixells/"}, {"@type": "ListItem", "position": 2, "name": "Builder OS", "item": "https://somilsharma2000.github.io/builder-os-site/"}]}]}</script>
@@ -273,11 +281,14 @@
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
 <script src="https://somilsharma2000.github.io/beyond-pixells/assets/bp-motion.js"></script>
 <script src="https://somilsharma2000.github.io/beyond-pixells/assets/bp-obsidian-veins.js"></script>
-<div class="bp-mobile-cta" role="complementary" aria-label="Book a demo">
-  <div class="bp-mobile-cta-in">
-    <div class="bp-mct-copy"><b>Book a Builder OS walkthrough</b><span>WhatsApp · 90-day pilot</span></div>
-    <a class="bp-mct-btn" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixells%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot">Chat now</a>
-  </div>
-</div>
+<script>
+(function(){
+  var els=document.querySelectorAll('section, .steps, .cards');
+  els.forEach(function(el){el.classList.add('reveal');});
+  if(!('IntersectionObserver' in window)){els.forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
 </body>
 </html>
