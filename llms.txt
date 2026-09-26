@@ -1,0 +1,14 @@
+# Builder OS
+> Operating system for real-estate builders: project milestones, inventory, broker and customer follow-ups, WhatsApp automation, milestone-linked collections. Built by Beyond Pixells, a product studio in India that
+> builds sector-specific operating systems for local businesses. 90-day pilot programme.
+
+## Links
+- Landing page: https://somilsharma2000.github.io/builder-os-site/
+- Studio / other products: https://somilsharma2000.github.io/beyond-pixells/
+- Blog (guides for local businesses): https://somilsharma2000.github.io/beyond-pixells/blog/
+- WhatsApp: https://wa.me/917737077479
+
+## Facts
+- India-native: WhatsApp-first automation, UPI payments, flat INR pricing
+- No per-member fees; one-time setup + flat monthly subscription
+- Every rollout includes a branded website, member/patient portal and owner dashboard
