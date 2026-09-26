@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Builder OS — The Revenue Recovery System for Tier-2 Builders | Beyond Pixels</title>
-<meta name="description" content="Builder OS by Beyond Pixels — lead follow-up, broker commission records, installment collections and RERA-ready quarterly exports for Tier-2 real estate builders. One system, every lead accounted for.">
+<title>Builder OS — The Revenue Recovery System for Tier-2 Builders | Beyond Pixells</title>
+<meta name="description" content="Builder OS by Beyond Pixells — lead follow-up, broker commission records, installment collections and RERA-ready quarterly exports for Tier-2 real estate builders. One system, every lead accounted for.">
 <meta name="theme-color" content="#0c0e13">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
@@ -65,6 +65,48 @@
   footer a{color:var(--gold);text-decoration:none}
   .note{font-size:.72rem;color:var(--mut);margin-top:18px;line-height:1.5}
   @media(max-width:700px){nav a.hide-m{display:none}}
+
+/* UPGRADE: orbs + hero mockup */
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none;animation:drift 14s ease-in-out infinite alternate}
+.orb-a{width:420px;height:420px;background:rgba(255,120,40,.18);top:-160px;left:-120px}
+.orb-b{width:380px;height:380px;background:rgba(217,164,65,.14);top:-60px;right:-140px;animation-delay:-7s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,34px) scale(1.08)}}
+.mock-wrap{position:relative;margin:56px auto 0;max-width:940px;perspective:1600px}
+.mock-wrap::before{content:"";position:absolute;inset:8% -4% -12%;background:linear-gradient(135deg,#FF3B30,#FF7A00);filter:blur(70px);opacity:.15;pointer-events:none}
+.mock{position:relative;border-radius:16px;background:linear-gradient(180deg,#14161D,#0D0F14);border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 90px rgba(0,0,0,.55);overflow:hidden;text-align:left;transform:rotateX(4deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.mock:hover{transform:rotateX(0deg)}
+.mock-top{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02)}
+.mock-top i{width:11px;height:11px;border-radius:50%}
+.mock-top i:nth-child(1){background:#FF5F57}.mock-top i:nth-child(2){background:#FEBC2E}.mock-top i:nth-child(3){background:#28C840}
+.mock-top span{margin-left:10px;font-size:.72rem;color:#64748B;letter-spacing:.06em}
+.mock-body{display:grid;grid-template-columns:170px 1fr;min-height:320px}
+.mock-side{border-right:1px solid rgba(255,255,255,.08);padding:18px 12px;display:flex;flex-direction:column;gap:4px;background:rgba(255,255,255,.015)}
+.mock-side b{font-size:.8rem;padding:8px 10px 12px;display:flex;align-items:center;gap:8px;color:#F8FAFC}
+.mock-side b .dot{width:8px;height:8px;border-radius:3px;background:linear-gradient(135deg,#FF3B30,#FF7A00)}
+.mock-side a{font-size:.76rem;color:#94A3B8;padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;align-items:center}
+.mock-side a i{font-style:normal;font-size:.6rem;color:#64748B;border:1px solid #222634;border-radius:4px;padding:1px 5px}
+.mock-side a.on{background:rgba(255,122,0,.1);color:#F8FAFC}
+.mock-main{padding:22px;display:flex;flex-direction:column;gap:16px}
+.mock-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:12px 14px}
+.kpi span{font-size:.66rem;color:#64748B;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
+.kpi b{font-size:1.05rem;color:#F8FAFC}
+.kpi em{font-style:normal;font-size:.62rem;color:#4ADE80}
+.mock-panels{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;flex:1}
+.mock-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:14px}
+.mock-panel h4{font-size:.72rem;color:#94A3B8;margin-bottom:12px;letter-spacing:.04em}
+.bars{display:flex;align-items:flex-end;gap:7px;height:80px}
+.bars i{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(180deg,rgba(255,122,0,.9),rgba(255,59,48,.45));opacity:.85;animation:grow 1.2s cubic-bezier(.2,.7,.2,1) both}
+.bars i:nth-child(2){animation-delay:.08s}.bars i:nth-child(3){animation-delay:.16s}.bars i:nth-child(4){animation-delay:.24s}.bars i:nth-child(5){animation-delay:.32s}.bars i:nth-child(6){animation-delay:.4s}.bars i:nth-child(7){animation-delay:.48s}
+@keyframes grow{from{height:6px}to{height:var(--h)}}
+.feed{display:flex;flex-direction:column;gap:9px}
+.feed div{display:flex;gap:9px;align-items:center;font-size:.72rem;color:#94A3B8}
+.feed .qr{width:22px;height:22px;border-radius:6px;background:rgba(0,242,254,.12);border:1px solid rgba(0,242,254,.3);color:#00F2FE;display:flex;align-items:center;justify-content:center;font-size:.55rem;flex-shrink:0}
+.feed .wa{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#4ADE80}
+.feed time{margin-left:auto;color:#64748B;font-size:.62rem}
+.mock-cap{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;color:#64748B;background:var(--bg,#0A0C10);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:5px 16px}
+@media(max-width:760px){.mock-body{grid-template-columns:1fr}.mock-side{flex-direction:row;overflow:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}.mock-kpis{grid-template-columns:repeat(2,1fr)}.mock-panels{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -80,17 +122,56 @@
   </div>
 </header>
 
-<div class="hero wrap">
+<div class="hero wrap" style="position:relative">
+  <div class="orb orb-a"></div><div class="orb orb-b"></div>
   <div class="kicker">For Tier-2 Builders · Plots, Villas & Flats</div>
   <h1>Your ads bring leads.<br><em>WhatsApp loses them.</em></h1>
   <p class="sub">Builder OS follows up every enquiry, records every broker's deal, tracks every installment — and hands your CA a clean quarterly export in one click. Built for builders who sell on WhatsApp, not on software.</p>
-  <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20to%20know%20more%20about%20Builder%20OS" target="_blank">WhatsApp Us — 15 minutes is all we need</a>
+  <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixells%2C%20I%20want%20to%20know%20more%20about%20Builder%20OS" target="_blank">WhatsApp Us — 15 minutes is all we need</a>
   <div><a class="cta2" href="app.html">Open the live working app</a></div>
   <div class="stats">
     <div class="stat"><b>99%</b><span>of digital leads never get a second follow-up</span></div>
     <div class="stat"><b>Rs 25K+</b><span>RERA late-filing penalty per quarter</span></div>
     <div class="stat"><b>10 min</b><span>for a clean quarterly export for your CA</span></div>
     <div class="stat"><b>Zero</b><span>staff training — works inside WhatsApp</span></div>
+  </div>
+
+  <div class="mock-wrap">
+    <div class="mock">
+      <div class="mock-top"><i></i><i></i><i></i><span>BUILDER OS — builder dashboard</span></div>
+      <div class="mock-body">
+        <div class="mock-side">
+          <b><span class="dot"></span>Your Projects</b>
+          <a class="on">Leads <i>23</i></a>
+          <a>Site Visits <i>5</i></a>
+          <a>Broker Deals</a>
+          <a>Installments</a>
+          <a>Collections <i>UPI</i></a>
+          <a>CA Export <i>&#10003;</i></a>
+          <a>Reports</a>
+        </div>
+        <div class="mock-main">
+          <div class="mock-kpis">
+            <div class="kpi"><span>Open leads</span><b>23</b> <em>&#9650; demo data</em></div>
+            <div class="kpi"><span>Follow-ups sent</span><b>19</b> <em>auto</em></div>
+            <div class="kpi"><span>Site visits booked</span><b>5</b> <em>&#9650; demo data</em></div>
+            <div class="kpi"><span>Installments due</span><b>7</b> <em>tracked</em></div>
+          </div>
+          <div class="mock-panels">
+            <div class="mock-panel"><h4>Enquiry flow this week</h4><div class="bars">
+              <i style="--h:38%;height:38%"></i><i style="--h:64%;height:64%"></i><i style="--h:50%;height:50%"></i><i style="--h:78%;height:78%"></i><i style="--h:56%;height:56%"></i><i style="--h:88%;height:88%"></i><i style="--h:66%;height:66%"></i>
+            </div></div>
+            <div class="mock-panel"><h4>WhatsApp just did this</h4><div class="feed">
+              <div><span class="qr wa">WA</span> 2nd follow-up sent <time>now</time></div>
+              <div><span class="qr">&#128206;</span> Site visit confirmed <time>4m</time></div>
+              <div><span class="qr wa">&#8377;</span> Installment received <time>12m</time></div>
+              <div><span class="qr">&#43;</span> New plot enquiry <time>21m</time></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mock-cap">Builder OS &middot; interface preview — demo data</div>
   </div>
 </div>
 
@@ -135,7 +216,7 @@
     <div class="band">
       <h3>See it working on your own project in 90 days</h3>
       <p>One project. Lead engine, follow-ups, collections and RERA export. We run it with you, and count the recovery in writing before we ever talk full pricing.</p>
-      <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixels%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot" target="_blank">Start the 90-day pilot</a>
+      <a class="cta" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixells%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot" target="_blank">Start the 90-day pilot</a>
     </div>
   </div>
 </section>
@@ -168,7 +249,7 @@
 
 <footer>
   <div class="wrap">
-    <p><strong>Beyond Pixels</strong> — product studio. Also builders of <a href="https://my-gym-os.base44.app">Gym OS</a> for fitness businesses across India.</p>
+    <p><strong>Beyond Pixells</strong> — product studio. Also builders of <a href="https://my-gym-os.base44.app">Gym OS</a> for fitness businesses across India.</p>
     <p style="margin-top:8px">+91 77370 77479 &nbsp;·&nbsp; beyondpixells@gmail.com</p>
     <p class="note">Builder OS provides data systems, not legal, tax or compliance advice. RERA filings remain the responsibility of the promoter and their chartered accountant. Builder OS is not affiliated with or endorsed by any government authority.</p>
   </div>
