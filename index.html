@@ -25,6 +25,8 @@
   :root{--ink:#F2F5FB;--card:#141833;--line:rgba(148,163,184,.26);--gold:#4D94FF;--gold2:#0066FF;--mut:#94A3B8;--bg:#0A0E29;--violet:#0066FF;--dim:#94A3B8;--gloss:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%)}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+
   body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
   ::selection{background:rgba(0, 102, 255,.55);color:#fff}
@@ -203,6 +205,7 @@
   <div class="wrap">
     <h2>The leak every builder knows</h2>
     <p class="h2sub">You don't have a software problem. You have a recovery problem.</p>
+    <div class="tscroll">
     <table>
       <tr><th>Where your money goes</th><th>Today</th><th>With Builder OS</th></tr>
       <tr><td>Facebook / Google leads</td><td>Die in WhatsApp after one call</td><td>Followed up till visit booked</td></tr>
@@ -210,6 +213,7 @@
       <tr><td>Buyer installments</td><td>Register + memory, dues slip silently</td><td>Due dates, reminders, defaulter board</td></tr>
       <tr><td>RERA quarterly report</td><td>Two to three days of staff scrambling</td><td>One-click export for your CA</td></tr>
     </table>
+    </div>
   </div>
 </section>
 

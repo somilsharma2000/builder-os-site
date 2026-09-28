@@ -6,22 +6,27 @@
 <title>Builder OS — Working System</title>
 <meta name="description" content="Builder OS working system: lead follow-up, site visits, broker commissions, installment collections and RERA exports. Demo runs in your browser.">
 <meta name="theme-color" content="#0A0E29">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://somilsharma2000.github.io/builder-os-site/app.html">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
   :root{
     --ink:#141833;--card:#171a23;--card2:#1d212d;--line:#272b38;--line2:#323848;
-    --gold:#4D94FF;--gold2:#0052CC;--goldsoft:rgba(217,164,65,.12);
+    --gold:#4D94FF;--gold2:#0052CC;--goldsoft:rgba(0,102,255,.12);
     --mut:#8d94a8;--mut2:#5d6478;--bg:#0A0E29;--text:#eaecf2;
     --red:#e06060;--redsoft:rgba(224,96,96,.12);--green:#42c983;--greensoft:rgba(66,201,131,.12);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
     background:var(--bg);
-    background-image:radial-gradient(1100px 500px at 80% -10%,rgba(217,164,65,.05),transparent 60%),radial-gradient(900px 500px at -10% 0%,rgba(91,141,239,.04),transparent 55%);
+    background-image:radial-gradient(1100px 500px at 80% -10%,rgba(0,102,255,.06),transparent 60%),radial-gradient(900px 500px at -10% 0%,rgba(91,141,239,.04),transparent 55%);
     background-attachment:fixed}
   .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
 
+  h1,h2,h3,.logo{font-family:'Space Grotesk',sans-serif;}
   /* header */
   header{position:sticky;top:0;z-index:60;background:rgba(12,14,19,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .hbar{display:flex;justify-content:space-between;align-items:center;padding:13px 0;gap:10px;flex-wrap:wrap}
@@ -31,13 +36,13 @@
   .hbtns{display:flex;gap:8px}
   .hbtn{background:var(--card);border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 13px;font-size:.74rem;cursor:pointer;transition:.2s}
   .hbtn:hover{color:var(--text);border-color:var(--line2);transform:translateY(-1px)}
-  .banner{background:rgba(217,164,65,.06);border-top:1px solid rgba(217,164,65,.15);color:var(--mut);font-size:.74rem;padding:7px 0;text-align:center}
+  .banner{background:rgba(0,102,255,.08);border-top:1px solid rgba(0,102,255,.2);color:var(--mut);font-size:.74rem;padding:7px 0;text-align:center}
   .banner b{color:var(--gold);font-weight:600}
   .tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .tabs::-webkit-scrollbar{display:none}
   .tab{flex-shrink:0;background:transparent;border:1px solid transparent;color:var(--mut);padding:8px 16px;border-radius:99px;font-size:.84rem;font-weight:600;cursor:pointer;transition:.25s;position:relative}
   .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
-  .tab.on{background:var(--goldsoft);border-color:rgba(217,164,65,.35);color:var(--gold)}
+  .tab.on{background:var(--goldsoft);border-color:rgba(0,102,255,.35);color:var(--gold)}
   .tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-left:6px;vertical-align:middle;opacity:.9}
 
   /* pages */
@@ -49,8 +54,8 @@
   .ptitle p{font-size:.78rem;color:var(--mut);margin-top:2px}
 
   /* buttons */
-  .btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#141310;border:none;border-radius:9px;padding:10px 18px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 4px 18px rgba(217,164,65,.18)}
-  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(217,164,65,.3)}
+  .btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#ffffff;border:none;border-radius:9px;padding:10px 18px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 4px 18px rgba(0,102,255,.25)}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,102,255,.4)}
   .btn:active{transform:scale(.97)}
   .btn.ghost{background:var(--card2);border:1px solid var(--line2);color:var(--text);font-weight:500;box-shadow:none}
   .btn.ghost:hover{border-color:var(--gold2);background:var(--card2)}
@@ -83,10 +88,10 @@
   .tool{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
   .srch{flex:1;min-width:180px;position:relative}
   .srch input{width:100%;background:var(--card);border:1px solid var(--line2);color:var(--text);border-radius:9px;padding:9px 13px;font-size:.84rem;transition:.2s}
-  .srch input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,164,65,.15)}
+  .srch input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(0,102,255,.2)}
   .chip{background:var(--card);border:1px solid var(--line);color:var(--mut);border-radius:99px;padding:6px 13px;font-size:.74rem;cursor:pointer;transition:.2s;font-weight:600}
   .chip:hover{color:var(--text)}
-  .chip.on{background:var(--goldsoft);border-color:rgba(217,164,65,.4);color:var(--gold)}
+  .chip.on{background:var(--goldsoft);border-color:rgba(0,102,255,.4);color:var(--gold)}
 
   /* kanban */
   .board{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
@@ -98,7 +103,7 @@
   .leadcard:hover{border-color:var(--line2);transform:translateY(-1px)}
   .leadcard b{font-size:.88rem;display:block}
   .tag{display:inline-block;font-size:.64rem;background:rgba(255,255,255,.04);color:var(--mut);border-radius:5px;padding:2px 7px;margin-top:5px;font-weight:600}
-  .tag.gold{color:var(--gold);border:1px solid rgba(217,164,65,.3);background:var(--goldsoft)}
+  .tag.gold{color:var(--gold);border:1px solid rgba(0,102,255,.4);background:var(--goldsoft)}
   .tag.red{color:var(--red);border:1px solid #5a2e2e;background:var(--redsoft)}
   .tag.green{color:var(--green);border:1px solid #2e5a3e;background:var(--greensoft)}
   .alert{font-size:.7rem;color:var(--red);margin-top:6px;font-weight:600}
@@ -127,7 +132,7 @@
   .sheet h3{color:var(--gold);font-size:.98rem;margin-bottom:14px}
   .sheet label{display:block;font-size:.7rem;color:var(--mut);margin:11px 0 4px;font-weight:600;letter-spacing:.3px}
   .sheet input,.sheet select{width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--text);border-radius:9px;padding:10px 12px;font-size:.85rem;transition:.2s}
-  .sheet input:focus,.sheet select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,164,65,.15)}
+  .sheet input:focus,.sheet select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(0,102,255,.2)}
   .sheet .frow{display:flex;gap:10px}
   .sheet .frow>div{flex:1}
   .sheet .btnrow{margin-top:18px;display:flex;gap:8px;justify-content:flex-end}
@@ -140,17 +145,17 @@
 
   .score{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;border-radius:99px;padding:3px 7px;margin-top:5px;font-weight:700}
   .score.hot{color:var(--red);background:var(--redsoft);border:1px solid rgba(224,96,96,.35)}
-  .score.warm{color:var(--gold);background:var(--goldsoft);border:1px solid rgba(217,164,65,.35)}
+  .score.warm{color:var(--gold);background:var(--goldsoft);border:1px solid rgba(0,102,255,.35)}
   .score.cool{color:var(--mut);background:rgba(255,255,255,.04);border:1px solid var(--line)}
   .activity{display:flex;gap:10px;align-items:flex-start;padding:9px 2px;border-bottom:1px solid var(--line);font-size:.78rem}
   .activity:last-child{border-bottom:0}.activity b{color:var(--text)}.activity time{color:var(--mut2);font-size:.68rem;margin-left:auto;white-space:nowrap}
-  .insight{background:linear-gradient(135deg,rgba(217,164,65,.12),rgba(217,164,65,.03));border:1px solid rgba(217,164,65,.25);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+  .insight{background:linear-gradient(135deg,rgba(0,102,255,.12),rgba(0,102,255,.03));border:1px solid rgba(0,102,255,.25);border-radius:12px;padding:14px 16px;margin-bottom:14px}
   .insight strong{color:var(--gold);font-size:.78rem}.insight p{font-size:.78rem;color:var(--mut);margin-top:3px}
   .reporthead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:14px}
   .reporthead h2{font-size:1.35rem}.reporthead p{color:var(--mut);font-size:.76rem;margin-top:3px}
   .reportgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
   .reportmetric{background:rgba(255,255,255,.03);border:1px solid var(--line);padding:13px;border-radius:10px}.reportmetric b{font-size:1.18rem;color:var(--gold);display:block}.reportmetric span{color:var(--mut);font-size:.7rem}
-  @media print{header,.banner,.no-print,.note{display:none!important}body{background:white;color:#111}.page{display:none!important}.page#p-report{display:block!important}.panel,.kpi,.reportmetric{background:white;border-color:#ddd;color:#111}.reporthead p,.reportmetric span{color:#666}.gold,.reportmetric b{color:#8a6116}}
+  @media print{header,.banner,.no-print,.note{display:none!important}body{background:white;color:#111}.page{display:none!important}.page#p-report{display:block!important}.panel,.kpi,.reportmetric{background:white;border-color:#ddd;color:#111}.reporthead p,.reportmetric span{color:#666}.gold,.reportmetric b{color:#0066FF}}
   .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--card2);border:1px solid var(--gold);color:var(--gold);border-radius:11px;padding:11px 22px;font-size:.8rem;z-index:200;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 12px 40px rgba(0,0,0,.5);font-weight:600}
   .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -162,7 +167,7 @@
     <div class="hbtns">
       <button class="hbtn" onclick="go('rera')">Export</button>
       <button class="hbtn" id="langBtn" onclick="toggleLang()">EN / HI</button>
-      <button class="hbtn" onclick="resetDemo()">Reset demo</button>
+      <button class="hbtn" onclick="resetDemo()">Reset demo</button><a class="hbtn" style="background:#0066FF;color:#fff;border-color:#0066FF;text-decoration:none;font-weight:600" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixells%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot" target="_blank">WhatsApp Us</a>
     </div>
   </div>
   <div class="wrap tabs" id="tabs">
@@ -608,5 +613,31 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch
 
 go(cur);
 </script>
+
+<footer>
+  <div class="wrap" style="text-align:center;padding:32px 18px;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;margin-top:40px;">
+    <p><strong>Beyond Pixells</strong> — product studio. Operating systems for local businesses:
+<a style="color:var(--gold);text-decoration:none;" href="https://somilsharma2000.github.io/beyond-pixells/">Beyond Pixells</a> ·
+<a style="color:var(--gold);text-decoration:none;" href="https://somilsharma2000.github.io/gym-os/">Gym OS</a> ·
+<a style="color:var(--gold);text-decoration:none;" href="https://somilsharma2000.github.io/dentist-os-site/">Dentist OS</a> ·
+<a style="color:var(--gold);text-decoration:none;" href="https://somilsharma2000.github.io/beyond-pixells/blog/">Blog</a></p>
+    <p style="margin-top:8px">+91 77370 77479 &nbsp;·&nbsp; beyondpixells@gmail.com</p>
+  </div>
+</footer>
+<style>
+.bp-mobile-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,41,0.95);backdrop-filter:blur(12px);border-top:1px solid rgba(0,102,255,0.3);padding:10px 16px;z-index:99;}
+.bp-mobile-cta-in{display:flex;align-items:center;justify-content:space-between;max-width:390px;margin:0 auto;gap:12px;}
+.bp-mct-copy b{display:block;font-size:.82rem;color:#fff;font-family:'Space Grotesk',sans-serif;}
+.bp-mct-copy span{font-size:.72rem;color:var(--mut);}
+.bp-mct-btn{background:linear-gradient(160deg,#0066FF,#0052CC);color:#fff;text-decoration:none;font-weight:700;font-size:.82rem;padding:8px 16px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,102,255,0.4);}
+@media(max-width:768px){.bp-mobile-cta{display:block;}}
+</style>
+<div class="bp-mobile-cta" role="complementary" aria-label="Book a demo">
+  <div class="bp-mobile-cta-in">
+    <div class="bp-mct-copy"><b>Book a Builder OS walkthrough</b><span>WhatsApp · 90-day pilot</span></div>
+    <a class="bp-mct-btn" href="https://wa.me/917737077479?text=Hi%20Beyond%20Pixells%2C%20I%20want%20the%2090-day%20Builder%20OS%20pilot">Chat now</a>
+  </div>
+</div>
+
 </body>
 </html>
