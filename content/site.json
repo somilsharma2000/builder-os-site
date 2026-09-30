@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "name": "Builder OS site content layer",
+    "version": 1,
+    "updated": "2026-09-30",
+    "note": "Single source of truth for editable Builder OS content. Command Center edits + deploys this file."
+  },
+  "hero": {
+    "headline": "Your ads bring leads.",
+    "hl": "WhatsApp loses them.",
+    "sub": "Builder OS follows up every enquiry, records every broker's deal, tracks every installment \u2014 and hands your CA a clean quarterly export in one click. Built for builders who sell on WhatsApp, not on software."
+  },
+  "cta": {
+    "primaryLabel": "WhatsApp Us \u2014 15 minutes is all we need",
+    "waPrefill": "Hi Beyond Pixells, I want to know more about Builder OS",
+    "waNumber": "917737077479"
+  },
+  "features": {
+    "mobileCta": {
+      "enabled": true,
+      "head": "Book a Builder OS walkthrough",
+      "sub": "WhatsApp \u00b7 90-day pilot"
+    }
+  }
+}
